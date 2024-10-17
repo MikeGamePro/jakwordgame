@@ -73,7 +73,7 @@ class TwitchBot(commands.Bot):
                 'name': 'Cell Decrease',
                 'theme': 'Landmine Words',
                 'command': f"(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) {cell_inc})))",
-                'triggers': ['fart', 'homicide', 'cringe', 'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'purple', 'orange', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
+                'triggers': ['over', 'naughty', 'shake', 'spin', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 'omega', 'cell', 'leave', 'crate', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'purple', 'orange', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
             },
             {
                 'name': 'Orb Increase',
@@ -113,7 +113,7 @@ class TwitchBot(commands.Bot):
             },
             {
                 'name': 'Yellow Eco',
-                'theme': 'Words Before "Day"',
+                'theme': 'Things Before "Day"',
                 'command': "(send-event *target* 'get-pickup (pickup-type eco-yellow) 5.0)",
                 'triggers': ['laundry', 'green', 'memorial', 'pay', 'birth', 'independence', 'sick', 'sun']
             },
