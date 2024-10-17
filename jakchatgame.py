@@ -10,7 +10,16 @@ import random
 import pyautogui
 from twitchio.ext import commands
 from dotenv import load_dotenv
+import pyttsx3
 
+engine = pyttsx3.init()
+engine.setProperty('rate',180)
+def speak(text):
+    print("saying in TTS: "+ text)
+    engine.say(text)
+    engine.runAndWait()
+
+#speak("this is a test message")
 # Load environment variables from chatgame.env
 load_dotenv(dotenv_path='chatgame.env')
 
@@ -52,7 +61,7 @@ class TwitchBot(commands.Bot):
                 'name': 'Death',
                 'theme': 'UNSC Vehicles',
                 'command': "(when (not (movie?))(target-attack-up *target* 'attack 'melt))",
-                'triggers': ['warthog', 'mongoose', 'elephant', 'mammoth', 'scorpion', 'falcon', 'bison', 'rhino', 'pelican', 'hornet']
+                'triggers': ['warthog', 'mongoose', 'elephant', 'mammoth', 'scorpion', 'falcon', 'rhino', 'pelican', 'hornet']
             },
             {
                 'name': 'Cell Increase',
@@ -64,7 +73,7 @@ class TwitchBot(commands.Bot):
                 'name': 'Cell Decrease',
                 'theme': 'Landmine Words',
                 'command': f"(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) {cell_inc})))",
-                'triggers': ['spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'amathyst', 'crack', 'epic', 'happy', 'purple', 'orange', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
+                'triggers': ['fart', 'homicide', 'cringe', 'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'purple', 'orange', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
             },
             {
                 'name': 'Orb Increase',
@@ -82,7 +91,7 @@ class TwitchBot(commands.Bot):
                 'name': 'Jump Height Boost',
                 'theme': 'Minecraft Items',
                 'command': f"(set! (-> *TARGET-bank* jump-height-max)(+ (-> *TARGET-bank* jump-height-max) (meters {jump_inc})))(set! (-> *TARGET-bank* double-jump-height-max)(+ (-> *TARGET-bank* double-jump-height-max) (meters {jump_inc})))",
-                'triggers': ['furnace', 'bed', 'bucket', 'wool', 'coal', 'iron', 'cobblestone']
+                'triggers': ['furnace', 'bed', 'bucket', 'wool', 'coal', 'iron', 'obsidian']
             },
             {
                 'name': 'Speed Boost',
@@ -234,6 +243,38 @@ class TwitchBot(commands.Bot):
                 'triggers': ['rock', 'village', 'island', 'city', 'basin', 'swamp', 'crater', 'citadel', 'tube', 'jungle', 'canyon', 'beach', 'cave', 'mountain', 'pass'],
                 'toggle': False
             },
+            {
+                'name': 'No Effect 1',
+                'theme': 'Types of Clocks',
+                'command': "",
+                'triggers': ['grandfather', 'cuckoo', 'alarm'],
+            },
+            {
+                'name': 'Low Poly',
+                'theme': 'Bands Without The Number',
+                'command': "(set! (-> *pc-settings* lod-force-tfrag) 2)(set! (-> *pc-settings* lod-force-tie) 3)(set! (-> *pc-settings* lod-force-ocean) 2)(set! (-> *pc-settings* lod-force-actor) 3)",
+                'command2': "(set! (-> *pc-settings* lod-force-tfrag) 0)(set! (-> *pc-settings* lod-force-tie) 0)(set! (-> *pc-settings* lod-force-ocean) 0)(set! (-> *pc-settings* lod-force-actor) 0)",
+                'triggers': ['blink', 'sum', 'republic', 'pilots', 'maroon', 'eve'],
+                'toggle': False
+            },
+            {
+                'name': 'No Effect 2',
+                'theme': 'Math Results',
+                'command': "",
+                'triggers': ['product', 'remainder', 'difference', 'quotient', 'power'],
+            },
+            {
+                'name': 'No Effect 3',
+                'theme': 'Things That Are Purple',
+                'command': "",
+                'triggers': ['grimace', 'eggplant', 'lavender', 'amethyst', 'violet'],
+            },
+            {
+                'name': 'poop',
+                'theme': 'poop',
+                'command': "",
+                'triggers': ['poop'],
+            },
         ]
         self.effects_found = {}
         self.goalc_process = None
@@ -285,13 +326,15 @@ class TwitchBot(commands.Bot):
                     self.words_used.add(word)  # Mark the word as used
                     self.effects_found[effect['name']] = self.effects_found.get(effect['name'], []) + [word]
                     remaining_words = set(effect['triggers']) - self.words_used
-                    await self.send_message(channel, f"{user} found {effect['name']} with '{word}'! ({len(effect['triggers']) - len(remaining_words)}/{len(effect['triggers'])})")
+                    await self.send_message(channel, f"{user} found {effect['name']} with '{word}' ({len(effect['triggers']) - len(remaining_words)}/{len(effect['triggers'])})!")
+                    speak(f"{user} found {effect['name']} with '{word}'")
                     break
 
             # Check if all words for the effect have been found
             if all(w in self.effects_found.get(effect['name'], []) for w in effect['triggers']):
                 await self.send_message(channel, f"All words found for {effect['name']} ({effect['theme']})!")
                 self.send_form(f"(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) {cell_inc})))")
+                speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
                 self.effects_found[effect['name']] = []  # Reset for the next round
 
     # Trigger the game effect and mark the word as used
@@ -321,7 +364,7 @@ class TwitchBot(commands.Bot):
 
     async def send_message(self, channel, message):
         """Send a message to the channel."""
-        await self.get_channel(channel).send(message)
+        await self.get_channel(channel).send(f"-> {message}")
     
     def launch_game(self):
         try:
