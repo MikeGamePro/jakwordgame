@@ -13,19 +13,19 @@ from dotenv import load_dotenv
 import pyttsx3
 
 engine = pyttsx3.init()
-engine.setProperty('rate',180)
+engine.setProperty('rate', 200)
 def speak(text):
-    print("saying in TTS: "+ text)
+    print("saying in TTS: " + text)
     engine.say(text)
     engine.runAndWait()
 
-#speak("this is a test message")
 # Load environment variables from chatgame.env
 load_dotenv(dotenv_path='chatgame.env')
 
 # Fetch OAuth token and channel from environment variables
 oauth_token = os.getenv('TWITCH_OAUTH_TOKEN')
 channel = os.getenv('TWITCH_USERNAME')
+tts = os.getenv('TTS') != "f"
 cell_inc = os.getenv('CELL_INC')
 orb_inc = os.getenv('ORB_INC')
 speed_inc = os.getenv('SPEED_INC')
@@ -34,6 +34,9 @@ slip_res_inc = os.getenv('SLIP_RES_INC')
 size_inc = os.getenv('SIZE_INC')
 blue_eco_inc = os.getenv('BLUE_ECO_INC')
 rolljump_inc = os.getenv('ROLLJUMP_INC')
+boosted_inc = os.getenv('BOOSTED_INC')
+
+mods = [channel, "mikegamepro"]
 
 point_list = ["training-start","game-start","village1-hut","village1-warp","beach-start",
               "jungle-start","jungle-tower","misty-start","misty-silo","misty-bike",
@@ -50,6 +53,9 @@ point_list = ["training-start","game-start","village1-hut","village1-warp","beac
               "lavatube-end","citadel-start","citadel-entrance","citadel-warp","citadel-launch-start",
               "citadel-launch-end","citadel-generator-start","citadel-generator-end","citadel-plat-start",
               "citadel-plat-end","citadel-elevator","finalboss-start","finalboss-fight"]
+death_list = ['melt', 'endlessfall', 'drown-death']
+
+chat_test = True
 
 class TwitchBot(commands.Bot):
     def __init__(self):
@@ -60,7 +66,7 @@ class TwitchBot(commands.Bot):
             {
                 'name': 'Death',
                 'theme': 'UNSC Vehicles',
-                'command': "(when (not (movie?))(target-attack-up *target* 'attack 'melt))",
+                'command': lambda: f"(when (not (movie?))(target-attack-up *target* 'attack '{random.choice(death_list)}))",
                 'triggers': ['warthog', 'mongoose', 'elephant', 'mammoth', 'scorpion', 'falcon', 'rhino', 'pelican', 'hornet']
             },
             {
@@ -73,7 +79,7 @@ class TwitchBot(commands.Bot):
                 'name': 'Cell Decrease',
                 'theme': 'Landmine Words',
                 'command': f"(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) {cell_inc})))",
-                'triggers': ['over', 'naughty', 'shake', 'spin', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 'omega', 'cell', 'leave', 'crate', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'purple', 'orange', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
+                'triggers': ['whisper', 'mirage', 'octopus', 'paradox', 'cloud', 'consume', 'splendid', 'twitch', 'elevator', 'squirrel', 'morning', 'rocket', 'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'mirrors', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 'robot', 'pencil', 'prawn', 'help', 'over', 'naughty', 'shake', 'spin', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 'omega', 'cell', 'leave', 'crate', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
             },
             {
                 'name': 'Orb Increase',
@@ -133,7 +139,7 @@ class TwitchBot(commands.Bot):
             },
             {
                 'name': 'Rapid Fire',
-                'theme': 'Wildcard Word',
+                'theme': 'Wildcard 2',
                 'command': "(set! (-> *TARGET-bank* yellow-projectile-speed) (meters 100))(set! (-> *TARGET-bank* yellow-attack-timeout) (seconds 0))",
                 'triggers': ['bumble']
             },
@@ -189,9 +195,9 @@ class TwitchBot(commands.Bot):
             },
             {
                 'name': 'Blue Eco Range Decrease',
-                'theme': 'Start and End With "T"',
+                'theme': 'Things That Are Purple',
                 'command': f"(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (- (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (- (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-                'triggers': ['tarot', 'trident', 'tract', 'talent', 'test', 'treat', 'trust', 'thought'],
+                'triggers': ['grimace', 'eggplant', 'lavender', 'amethyst'],
             },
             {
                 'name': 'Slippery Ground',
@@ -244,9 +250,9 @@ class TwitchBot(commands.Bot):
                 'toggle': False
             },
             {
-                'name': 'No Effect 1',
+                'name': 'Decrease Boosted Distance',
                 'theme': 'Types of Clocks',
-                'command': "",
+                'command': f"(set! (-> *edge-surface* fric) (+ {float(boosted_inc)} (-> *edge-surface* fric)))",
                 'triggers': ['grandfather', 'cuckoo', 'alarm'],
             },
             {
@@ -258,22 +264,46 @@ class TwitchBot(commands.Bot):
                 'toggle': False
             },
             {
-                'name': 'No Effect 2',
+                'name': 'Increase Boosted Distance',
                 'theme': 'Math Results',
-                'command': "",
+                'command': f"(set! (-> *edge-surface* fric) (- (-> *edge-surface* fric) {float(boosted_inc)}))",
                 'triggers': ['product', 'remainder', 'difference', 'quotient', 'power'],
             },
             {
-                'name': 'No Effect 3',
-                'theme': 'Things That Are Purple',
+                'name': 'No Effect 1',
+                'theme': 'Start and End With "T"',
                 'command': "",
-                'triggers': ['grimace', 'eggplant', 'lavender', 'amethyst', 'violet'],
+                'triggers': ['tarot', 'trident', 'tract', 'talent', 'test', 'treat', 'trust', 'thought'],
             },
             {
                 'name': 'poop',
                 'theme': 'poop',
                 'command': "",
                 'triggers': ['poop'],
+            },
+            {
+                'name': 'Back 2 Geyser',
+                'theme': 'Wildcard 1',
+                'command': "(start 'play (get-continue-by-name *game-info* \"intro-start\"))(auto-save-command 'auto-save 0 0 *default-pool*)",
+                'triggers': ['ingredient'],
+            },
+            {
+                'name': 'Cell Bundle 1',
+                'theme': 'Wildcard 3',
+                'command': "(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) 2)))",
+                'triggers': ['rainbow'],
+            },
+            {
+                'name': 'Cell Bundle 2',
+                'theme': 'Wildcard 4',
+                'command': "(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) 2)))",
+                'triggers': ['galaxy'],
+            },
+            {
+                'name': 'Cell Bundle 3',
+                'theme': 'Wildcard 5',
+                'command': "(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) 2)))",
+                'triggers': ['marble'],
             },
         ]
         self.effects_found = {}
@@ -301,66 +331,62 @@ class TwitchBot(commands.Bot):
         # Start goalc.exe when bot is ready
         self.launch_game()
 
-    # Event: When a message is received
     async def event_message(self, message):
-        # Check if the author is the bot itself
-        if message.author.name.lower() == channel.lower():
-            return
+        # Ignore messages from the bot itself, unless they are commands
+        if (message.author.name.lower() == channel.lower() and not chat_test) and not message.content.startswith('!'):
+            return  # Ignore other messages from the bot itself
 
-        # Proceed with processing the message
         chat_message = message.content.lower().strip()
         print(f"Received message: {chat_message}")
 
-        # Store the username of the sender
-        user = message.author.name
+        # Check for start and stop commands
+        if chat_message == "!startgame" and message.author.name.lower() in mods:
+            self.active = True
+            await self.send_message(channel, "Word processing started!")
+            return
+        elif chat_message == "!stopgame" and message.author.name.lower() in mods:
+            self.active = False
+            await self.send_message(channel, "Word processing stopped!")
+            return
 
-        # Check if any effect is triggered by the chat message
-        await self.handle_chat_message(chat_message, user)
+        # Only process messages if active
+        if self.active:
+            user = message.author.name
+            await self.handle_chat_message(chat_message, user)
 
-    # Handle the logic to trigger effects based on chat message
     async def handle_chat_message(self, chat_message, user):
         for effect in self.effects:
             for word in effect['triggers']:
                 if re.search(r'\b' + re.escape(word) + r'\b', chat_message) and word not in self.words_used:
                     await self.trigger_effect(effect, word, user)
-                    self.words_used.add(word)  # Mark the word as used
+                    self.words_used.add(word)
                     self.effects_found[effect['name']] = self.effects_found.get(effect['name'], []) + [word]
                     remaining_words = set(effect['triggers']) - self.words_used
                     await self.send_message(channel, f"{user} found {effect['name']} with '{word}' ({len(effect['triggers']) - len(remaining_words)}/{len(effect['triggers'])})!")
-                    speak(f"{user} found {effect['name']} with '{word}'")
+                    if tts: 
+                        speak(f"{user} found {effect['name']} with '{word}'")
                     break
 
-            # Check if all words for the effect have been found
             if all(w in self.effects_found.get(effect['name'], []) for w in effect['triggers']):
                 await self.send_message(channel, f"All words found for {effect['name']} ({effect['theme']})!")
                 self.send_form(f"(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) {cell_inc})))")
-                speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
+                if tts:
+                    speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
                 self.effects_found[effect['name']] = []  # Reset for the next round
 
-    # Trigger the game effect and mark the word as used
     async def trigger_effect(self, effect, word, user):
-        # Determine the command to send based on toggle property
         if 'toggle' in effect and effect['toggle']:
-            # If toggle is true, set it to false and use command2
             effect['toggle'] = False
             command_to_send = effect['command2']
         else:
-            # If no toggle or toggle is false, use the main command
             if callable(effect['command']):
-                # Call the command if it's a lambda (dynamically generated)
                 command_to_send = effect['command']()
             else:
-                # Otherwise, it's a static string
                 command_to_send = effect['command']
-            
-            # After sending the main command, set toggle to true if applicable
             if 'toggle' in effect:
                 effect['toggle'] = True
 
-        # Send the command to the goalc.exe window
         self.send_form(command_to_send)
-
-    # Launch goalc.exe using subprocess
 
     async def send_message(self, channel, message):
         """Send a message to the channel."""
@@ -393,8 +419,6 @@ class TwitchBot(commands.Bot):
         except Exception as e:
             print(f"Error launching gk or goalc: {e}")
 
-
-    # Send a command to the goalc window
     def send_form(self, form):
         header = struct.pack('<II', len(form), 10)
         self.clientSocket.sendall(header + form.encode())
