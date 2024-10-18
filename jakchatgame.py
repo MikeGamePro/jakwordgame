@@ -55,7 +55,7 @@ point_list = ["training-start","game-start","village1-hut","village1-warp","beac
               "citadel-plat-end","citadel-elevator","finalboss-start","finalboss-fight"]
 death_list = ['melt', 'endlessfall', 'drown-death']
 
-chat_test = True
+chat_test = False
 
 class TwitchBot(commands.Bot):
     def __init__(self):
@@ -331,6 +331,7 @@ class TwitchBot(commands.Bot):
         # Start goalc.exe when bot is ready
         self.launch_game()
 
+    # This function handles chat messages and specific commands
     async def event_message(self, message):
         # Ignore messages from the bot itself, unless they are commands
         if (message.author.name.lower() == channel.lower() and not chat_test) and not message.content.startswith('!'):
@@ -347,6 +348,11 @@ class TwitchBot(commands.Bot):
         elif chat_message == "!stopgame" and message.author.name.lower() in mods:
             self.active = False
             await self.send_message(channel, "Word processing stopped!")
+            return
+
+        # Process custom command for showing found words for an effect
+        if chat_message.startswith('!'):
+            await self.handle_custom_commands(chat_message, message.author.name)
             return
 
         # Only process messages if active
@@ -373,6 +379,28 @@ class TwitchBot(commands.Bot):
                 if tts:
                     speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
                 self.effects_found[effect['name']] = []  # Reset for the next round
+
+    # Handle chat commands, including requests for showing found words for an effect
+    async def handle_custom_commands(self, command, user):
+        command = command.strip().lower()
+        
+        # Check if the command corresponds to any effect
+        for effect in self.effects:
+            effect_command = "!"+effect['name'].replace(" ", "").lower()  # Make a clean command (e.g., "!speedboost")
+            
+            if command == effect_command:
+                # Gather all found words for the effect
+                found_words = self.effects_found.get(effect['name'], [])
+                
+                # If no words have been found, notify the user
+                if not found_words:
+                    #await self.send_message(channel, f"{effect['name']} has no words found yet.")
+                    return
+                else:
+                    # Show all found words
+                    found_words_str = ", ".join(found_words)
+                    await self.send_message(channel, f"{effect['name']}: {found_words_str}")
+                return  # Exit the loop after handling the correct command
 
     async def trigger_effect(self, effect, word, user):
         if 'toggle' in effect and effect['toggle']:
