@@ -79,7 +79,14 @@ class TwitchBot(commands.Bot):
                 'name': 'Cell Decrease',
                 'theme': 'Landmine Words',
                 'command': f"(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) {cell_inc})))",
-                'triggers': ['whisper', 'mirage', 'octopus', 'paradox', 'cloud', 'consume', 'splendid', 'twitch', 'elevator', 'squirrel', 'morning', 'rocket', 'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'mirrors', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 'robot', 'pencil', 'prawn', 'help', 'over', 'naughty', 'shake', 'spin', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 'omega', 'cell', 'leave', 'crate', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 'teacher', 'crime', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
+                'triggers': ['whisper', 'spectrum', 'octopus', 'paradox', 'cloud', 'consume', 'splendid', 'twitch', 'elevator', 'squirrel', 'morning', 
+                             'rocket', 'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'mirrors', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 
+                             'robot', 'pencil', 'prawn', 'help', 'over', 'naughty', 'shake', 'spin', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 
+                             'archipelago', 'omega', 'cell', 'leave', 'crate', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 
+                             'napkin', 'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 
+                             'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 'sorry', 'fire', 
+                             'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 'teacher', 'crime', 
+                             'manslaughter', 'mercury', 'day', 'gamer', 'stellar']
             },
             {
                 'name': 'Orb Increase',
@@ -139,7 +146,7 @@ class TwitchBot(commands.Bot):
             },
             {
                 'name': 'Rapid Fire',
-                'theme': 'Wildcard 2',
+                'theme': 'Wildcard 1',
                 'command': "(set! (-> *TARGET-bank* yellow-projectile-speed) (meters 100))(set! (-> *TARGET-bank* yellow-attack-timeout) (seconds 0))",
                 'triggers': ['bumble']
             },
@@ -283,7 +290,7 @@ class TwitchBot(commands.Bot):
             },
             {
                 'name': 'Back 2 Geyser',
-                'theme': 'Wildcard 1',
+                'theme': 'Wildcard 2',
                 'command': "(start 'play (get-continue-by-name *game-info* \"intro-start\"))(auto-save-command 'auto-save 0 0 *default-pool*)",
                 'triggers': ['ingredient'],
             },

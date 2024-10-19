@@ -38,7 +38,7 @@ class TwitchBot(commands.Bot):
         if self.connected_channels:
             for msg in self.messages:
                 await self.connected_channels[0].send(msg)
-                await asyncio.sleep(0.5)  # Wait for 1 second before sending the next message
+                await asyncio.sleep(0.5)  # Wait before sending the next message
 
     # Event: When a message is received
     async def event_message(self, message):
