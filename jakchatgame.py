@@ -88,8 +88,9 @@ class TwitchBot(commands.Bot):
                                      'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 
                                      'teacher', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar', 'scatter', 'hype', 'fresh', 'drink', 'electric', 'bound', 
                                      'weiner', 'half', 'muse', 'misty', 'camera', 'hue', 'face', 'log', 'please', 'rhyme', 'search', 'fix', 'wait', 'prison', 'mistake', 
-                                     'trunk', 'reason', 'team', 'subscribe', 'hops', "among", 'blunder', 'skip', 'ratchet', 'canine', 'last', 'recess', 'smash', 'spectacular', 
-                                     'actor', 'mammal', 'stream', 'tackle', 'fine', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'law', 'ignite', 'twirl', 'beaver', 'stand']
+                                     'trunk', 'reason', 'team', 'subscribe', 'hops', 'among', 'blunder', 'skip', 'ratchet', 'canine', 'last', 'recess', 'smash', 'spectacular', 
+                                     'actor', 'mammal', 'stream', 'tackle', 'fine', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'law', 'ignite', 'twirl', 
+                                     'beaver', 'stand']
                     },
                     {
                         'name': 'Orb Increase',
@@ -285,7 +286,7 @@ class TwitchBot(commands.Bot):
                         'command': "(send-event *target* 'sidekick #f)",
                         'command2': "(send-event *target* 'sidekick #t)",
                         'triggers': ['clue', 'risk', 'monopoly', 'battleship'],
-                        'toggle': True
+                        'toggle': False
                     },
                     {
                         'name': 'poop',
