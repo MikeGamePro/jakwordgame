@@ -7,11 +7,13 @@ import struct
 import atexit
 import re
 import random
-import pyautogui
+import pyttsx3
 from twitchio.ext import commands
 from dotenv import load_dotenv
-import pyttsx3
+import asyncio
+import sys
 
+# Initialize text-to-speech engine
 engine = pyttsx3.init()
 engine.setProperty('rate', 200)
 def speak(text):
@@ -35,6 +37,8 @@ size_inc = os.getenv('SIZE_INC')
 blue_eco_inc = os.getenv('BLUE_ECO_INC')
 rolljump_inc = os.getenv('ROLLJUMP_INC')
 boosted_inc = os.getenv('BOOSTED_INC')
+iframes_inc = os.getenv('IFRAMES_INC')
+grav_inc = os.getenv('GRAVITY_INC')
 
 mods = [channel, "mikegamepro"]
 
@@ -54,6 +58,7 @@ point_list = ["training-start","game-start","village1-hut","village1-warp","beac
               "citadel-launch-end","citadel-generator-start","citadel-generator-end","citadel-plat-start",
               "citadel-plat-end","citadel-elevator","finalboss-start","finalboss-fight"]
 death_list = ['melt', 'endlessfall', 'drown-death']
+boom_list = ['dcrate-break', 'explosion', 'explosion-2', 'zoomer-explode', 'blob-explode']
 
 chat_test = False
 
@@ -88,15 +93,15 @@ class TwitchBot(commands.Bot):
                                      'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 
                                      'teacher', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar', 'scatter', 'hype', 'fresh', 'drink', 'electric', 'bound', 
                                      'weiner', 'half', 'muse', 'misty', 'camera', 'hue', 'face', 'log', 'please', 'rhyme', 'search', 'fix', 'wait', 'prison', 'mistake', 
-                                     'trunk', 'reason', 'team', 'subscribe', 'hops', 'among', 'blunder', 'skip', 'ratchet', 'canine', 'last', 'recess', 'smash', 'spectacular', 
-                                     'actor', 'mammal', 'stream', 'tackle', 'fine', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'law', 'ignite', 'twirl', 
-                                     'beaver', 'stand']
+                                     'trunk', 'reason', ['honor', 'honour'], 'subscribe', 'hops', 'among', 'blunder', 'skip', 'ratchet', 'canine', 'last', 'recess', 'smash', 'spectacular', 
+                                     'actor', 'mammal', 'stream', 'tackle', 'wide', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'law', 'ignite', 'twirl', 
+                                     'beaver', 'execute', 'deposit', 'separate', 'needle', 'imposter', 'marijuana']
                     },
                     {
                         'name': 'Orb Increase',
                         'theme': 'Underground Creatures',
                         'command': f"(set! (-> *game-info* money)(max 0.0 (+ (-> *game-info* money) {orb_inc})))",
-                        'triggers': ['mole', 'earthworm', 'ant', 'badger', 'gopher', 'termite', 'groundhog']
+                        'triggers': [['mole', 'moles'], 'earthworm', ['ant', 'ants'], 'badger', 'gopher', ['termite', 'termites'], 'groundhog']
                     },
                     {
                         'name': 'Orb Decrease',
@@ -117,6 +122,14 @@ class TwitchBot(commands.Bot):
                         'triggers': ['glee', 'friends', 'arrow', 'scrubs', 'survivor', 'lost', 'cheers']
                     },
                     {
+                        'name': 'Ground Pound Only',
+                        'theme': '"Wizard of Oz" Wishes',
+                        'command': "(set! (-> *TARGET-bank* punch-radius) (meters -1.0))(set! (-> *TARGET-bank* spin-radius) (meters -1.0))(set! (-> *TARGET-bank* uppercut-radius) (meters -1.0))",
+                        'command2': "(set! (-> *TARGET-bank* punch-radius) (meters 1.3))(set! (-> *TARGET-bank* spin-radius) (meters 2.2))(set! (-> *TARGET-bank* uppercut-radius) (meters 1))",
+                        'triggers': ['home', 'heart', 'courage', 'brain'],
+                        'toggle': False
+                    },
+                    {
                         'name': 'Blue Eco',
                         'theme': 'Pokémon Games',
                         'command': "(send-event *target* 'get-pickup (pickup-type eco-blue) 5.0)",
@@ -130,15 +143,21 @@ class TwitchBot(commands.Bot):
                     },
                     {
                         'name': 'Yellow Eco',
-                        'theme': 'Things Before "Day"',
+                        'theme': 'Before "Day"',
                         'command': "(send-event *target* 'get-pickup (pickup-type eco-yellow) 5.0)",
-                        'triggers': ['laundry', 'green', 'memorial', 'pay', 'birth', 'independence', 'sick', 'sun']
+                        'triggers': ['laundry', 'green', 'pay', 'birth', 'independence', 'sick', 'sun']
                     },
                     {
                         'name': 'Trip',
                         'theme': 'Palindromes',
                         'command': "(send-event *target* 'loading)",
                         'triggers': ['noon', 'kayak', 'radar', 'racecar', 'refer', 'level', 'civic', 'deified', 'tenet', 'madam', 'rotor']
+                    },
+                    {
+                        'name': 'BOOM',
+                        'theme': 'Found in a Courtroom',
+                        'command': lambda: f"(sound-play \"{random.choice(boom_list)}\")",
+                        'triggers': ['judge', 'jury', 'witness', 'bailiff', 'gavel', 'defendant', 'plaintiff', 'podium', 'bench', 'attorney', 'record', 'evidence']
                     },
                     {
                         'name': 'Invulnerability',
@@ -167,6 +186,18 @@ class TwitchBot(commands.Bot):
                         'triggers': ['absurd', 'preposterous', 'ludicrous', 'outlandish']
                     },
                     {
+                        'name': 'I-Frames Increase',
+                        'theme': 'Avengers',
+                        'command': f"(set! (-> *TARGET-bank* hit-invulnerable-timeout) (+ (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {float(iframes_inc)})))",
+                        'triggers': ['captain', 'hawk', 'spider', 'widow', 'panther', 'hulk']
+                    },
+                    {
+                        'name': 'I-Frames Decrease',
+                        'theme': 'Vampire',
+                        'command': f"(set! (-> *TARGET-bank* hit-invulnerable-timeout) (- (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {float(iframes_inc)})))",
+                        'triggers': ['garlic', 'blood', 'cape']
+                    },
+                    {
                         'name': 'Mirror World',
                         'theme': 'Carnival',
                         'command': "(set! (-> *pc-settings* speedrunner-mode?) #f)(begin (logior! (-> *pc-settings* cheats) (pc-cheats mirror)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats mirror)))",
@@ -177,13 +208,13 @@ class TwitchBot(commands.Bot):
                     #{
                     #    'name': 'Size Increase',
                     #    'theme': 'none',
-                    #    'command': f"(set! (-> (-> (the-as target *target* )root)scale x) (+ (-> (-> (the-as target *target* )root)scale x) {size_inc}))(set! (-> (-> (the-as target *target* )root)scale y) (+ (-> (-> (the-as target *target* )root)scale y) {size_inc}))(set! (-> (-> (the-as target *target* )root)scale z) (+ (-> (-> (the-as target *target* )root)scale z) {size_inc}))",
+                    #    'command': f"(set! *custom-scale* (+ *custom-scale* {size_inc}))(set! (-> (-> (the-as target *target* )root)scale x) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale y) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale z) *custom-scale*)",
                     #    'triggers': ['mm', 'nn', 'oo', 'pp'],
                     #},
                     #{
                     #    'name': 'Size Decrease',
                     #    'theme': 'none',
-                    #    'command': f"(set! (-> (-> (the-as target *target* )root)scale x) (- (-> (-> (the-as target *target* )root)scale x) {size_inc}))(set! (-> (-> (the-as target *target* )root)scale y) (- (-> (-> (the-as target *target* )root)scale y) {size_inc}))(set! (-> (-> (the-as target *target* )root)scale z) (- (-> (-> (the-as target *target* )root)scale z) {size_inc}))",
+                    #    'command': f"(set! *custom-scale* (- *custom-scale* {size_inc}))(set! (-> (-> (the-as target *target* )root)scale x) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale y) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale z) *custom-scale*)",
                     #    'triggers': ['qq', 'rr', 'ss', 'tt'],
                     #},
                     {
@@ -246,10 +277,10 @@ class TwitchBot(commands.Bot):
                     },
                     {
                         'name': 'No Textures',
-                        'theme': 'Types of Poetry',
+                        'theme': 'Before "Mate"',
                         'command': "(set! (-> *pc-settings* speedrunner-mode?) #f)(begin (logior! (-> *pc-settings* cheats) (pc-cheats no-tex)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats no-tex)))",
                         'command2': "(logclear! (-> *pc-settings* cheats) (pc-cheats no-tex))",
-                        'triggers': ['ode', 'haiku', 'limerick', 'ballad'],
+                        'triggers': ['soul', 'class', 'team', 'check', 'room', 'play'],
                         'toggle': False
                     },
                     {
@@ -267,11 +298,23 @@ class TwitchBot(commands.Bot):
                         'triggers': ['grandfather', 'cuckoo', 'alarm'],
                     },
                     {
+                        'name': 'Gravity Increase',
+                        'theme': 'Bowling',
+                        'command': f"(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {float(grav_inc)}))",
+                        'triggers': ['strike', ['pin', 'pins'], ['lane', 'lanes'], 'spare', 'turkey'],
+                    },
+                    {
+                        'name': 'Gravity Decrease',
+                        'theme': 'Types of Insurance',
+                        'command': f"(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {float(grav_inc)}))",
+                        'triggers': ['life', 'travel', 'health', 'dental', 'car'],
+                    },
+                    {
                         'name': 'Low Poly',
                         'theme': 'Bands Without The Number',
                         'command': "(set! (-> *pc-settings* lod-force-tfrag) 2)(set! (-> *pc-settings* lod-force-tie) 3)(set! (-> *pc-settings* lod-force-ocean) 2)(set! (-> *pc-settings* lod-force-actor) 3)",
                         'command2': "(set! (-> *pc-settings* lod-force-tfrag) 0)(set! (-> *pc-settings* lod-force-tie) 0)(set! (-> *pc-settings* lod-force-ocean) 0)(set! (-> *pc-settings* lod-force-actor) 0)",
-                        'triggers': ['blink', 'sum', 'republic', 'pilots', 'maroon', 'eve'],
+                        'triggers': ['blink', 'sum', 'republic', ['pilots', 'pilot'], 'maroon', 'eve'],
                         'toggle': False
                     },
                     {
@@ -339,8 +382,11 @@ class TwitchBot(commands.Bot):
                 ]
         self.effects_found = {}
         self.goalc_process = None
+        self.gk_process = None
         self.clientSocket = None
+        self.active = False  # Track whether the word processing is active
 
+        # Register the cleanup function to be called at exit
         atexit.register(self.cleanup)
 
     def cleanup(self):
@@ -359,10 +405,10 @@ class TwitchBot(commands.Bot):
     async def event_ready(self):
         print(f'Logged in as | {channel}')
         print(f'Connected to channel | {self.connected_channels}')
-        # Start goalc.exe when bot is ready
-        self.launch_game()
+        # Start goalc.exe and gk.exe when bot is ready
+        await self.launch_game()
 
-    # This function handles chat messages and specific commands
+    # Handle incoming messages in the chat
     async def event_message(self, message):
         # Ignore messages from the bot itself, unless they are commands
         if (message.author.name.lower() == channel.lower() and not chat_test) and not message.content.startswith('!'):
@@ -375,6 +421,7 @@ class TwitchBot(commands.Bot):
         if chat_message == "!startgame" and message.author.name.lower() in mods:
             self.active = True
             await self.send_message(channel, "Word processing started!")
+            speak("Word processing started!")
             return
         elif chat_message == "!stopgame" and message.author.name.lower() in mods:
             self.active = False
@@ -398,20 +445,30 @@ class TwitchBot(commands.Bot):
             if effect['name'] not in self.effects_found:
                 self.effects_found[effect['name']] = {'words': [], 'completed': False}
 
-            for word in effect['triggers']:
-                # Check if the word exists in the chat message and hasn't been used
-                if re.search(r'\b' + re.escape(word) + r'\b', chat_message) and word not in self.effects_found[effect['name']]['words']:
-                    # Trigger the effect
-                    await self.trigger_effect(effect, word, user)
+            for trigger in effect['triggers']:
+                # Determine if the trigger is a list (multiple alternatives) or a single word
+                if isinstance(trigger, list):
+                    # For a list, check if any alternative word exists in the message
+                    match = any(re.search(r'\b' + re.escape(word) + r'\b', chat_message) for word in trigger)
+                    main_word = trigger[0]  # Use the first word in the list as the unique identifier
+                else:
+                    # For a single word trigger
+                    match = re.search(r'\b' + re.escape(trigger) + r'\b', chat_message)
+                    main_word = trigger  # Single word is the main word itself
 
-                    # Add the word to the found words list
-                    self.effects_found[effect['name']]['words'].append(word)
+                # If there is a match and the word hasn't been used already
+                if match and main_word not in self.effects_found[effect['name']]['words']:
+                    # Trigger the effect
+                    await self.trigger_effect(effect, main_word, user)
+
+                    # Add the main word to the found words list
+                    self.effects_found[effect['name']]['words'].append(main_word)
 
                     remaining_words = len(effect['triggers']) - len(self.effects_found[effect['name']]['words'])
-                    await self.send_message(channel, f"{user} found {effect['name']} with '{word}' ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})!")
+                    await self.send_message(channel, f"{user} found {effect['name']} with '{main_word}' ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})!")
 
                     if tts:
-                        speak(f"{user} found {effect['name']} with '{word}'")
+                        speak(f"{user} found {effect['name']} with '{main_word}'")
 
                     break  # Stop processing after finding one word to prevent multiple matches in one message
 
@@ -419,7 +476,7 @@ class TwitchBot(commands.Bot):
             if len(self.effects_found[effect['name']]['words']) == len(effect['triggers']) and not self.effects_found[effect['name']]['completed']:
                 await self.send_message(channel, f"All words found for {effect['name']} ({effect['theme']})!")
                 self.send_form(f"(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) {cell_inc})))")
-                
+
                 if tts:
                     speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
 
@@ -432,7 +489,7 @@ class TwitchBot(commands.Bot):
 
         # Check if the command corresponds to any effect
         for effect in self.effects:
-            effect_command = "!"+effect['name'].replace(" ", "").lower()  # Make a clean command (e.g., "!speedboost")
+            effect_command = "!" + re.sub(r'[^a-zA-Z0-9]', '', effect['name']).lower()  # Make a clean command (e.g., "!speedboost")
 
             if command == effect_command:
                 # Gather all found words for the effect
@@ -467,20 +524,21 @@ class TwitchBot(commands.Bot):
     async def send_message(self, channel, message):
         """Send a message to the channel."""
         await self.get_channel(channel).send(f"-> {message}")
-    
-    def launch_game(self):
+
+    # Launch goalc.exe and gk.exe asynchronously, and monitor their statuses
+    async def launch_game(self):
         try:
             # Start gk.exe first
             self.gk_process = subprocess.Popen(['gk.exe', '-v', '--', '-boot', '-fakeiso', '-debug'], cwd=os.getcwd())
             
             # Wait for a moment to ensure gk.exe initializes properly
-            time.sleep(2)
+            await asyncio.sleep(2)
             
             # Start goalc.exe
             self.goalc_process = subprocess.Popen(['goalc.exe'], cwd=os.getcwd())
             
             # Optionally, wait for the goalc process to initialize
-            time.sleep(2)
+            await asyncio.sleep(2)
 
             # Set up the socket connection to goalc.exe here if necessary
             self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -494,8 +552,34 @@ class TwitchBot(commands.Bot):
             self.send_form('(mi)')
             self.send_form("(set! *debug-segment* #f)")
             self.send_form("(set! *cheat-mode* #f)")
+
+            # Start an asyncio task to monitor the subprocesses
+            asyncio.create_task(self.monitor_subprocesses())
+
         except Exception as e:
             print(f"Error launching gk or goalc: {e}")
+            self.cleanup()
+            sys.exit(1)  # Exit with error code
+
+    async def monitor_subprocesses(self):
+        """Monitor subprocesses asynchronously and terminate the program if any subprocess closes."""
+        while True:
+            goalc_status = self.goalc_process.poll()
+            gk_status = self.gk_process.poll()
+
+            if goalc_status is not None:
+                print("goalc.exe has terminated.")
+                break
+
+            if gk_status is not None:
+                print("gk.exe has terminated.")
+                break
+
+            await asyncio.sleep(1)  # Sleep briefly to avoid high CPU usage
+
+        # If we break out of the loop (i.e., one of the subprocesses terminated), call cleanup and exit
+        self.cleanup()
+        sys.exit(1)  # Exit with error code
 
     def send_form(self, form):
         header = struct.pack('<II', len(form), 10)
