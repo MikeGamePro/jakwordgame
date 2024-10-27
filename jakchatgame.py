@@ -85,17 +85,17 @@ class TwitchBot(commands.Bot):
                         'theme': 'Landmine Words',
                         'command': f"(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) {cell_inc})))",
                         'triggers': ['whisper', 'mirage', 'octopus', 'paradox', 'cloud', 'consume', 'splendid', 'twitch', 'elevator', 'rocket', 
-                                     'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'mirrors', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 'robot', 'pencil', 
+                                     'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 'robot', 'pencil', 
                                      'prawn', 'help', 'over', 'naughty', 'shake', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 
-                                     'omega', 'cell', 'leave', 'crate', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 
+                                     'omega', 'cell', 'leave', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 
                                      'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 
                                      'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 
                                      'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 
                                      'teacher', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar', 'scatter', 'hype', 'fresh', 'drink', 'electric', 'bound', 
-                                     'weiner', 'half', 'muse', 'misty', 'camera', 'hue', 'face', 'log', 'please', 'rhyme', 'search', 'fix', 'wait', 'prison', 'mistake', 
+                                     'weiner', 'half', 'muse', 'misty', 'camera', 'hue', 'log', 'please', 'rhyme', 'search', 'fix', 'wait', 'prison', 'mistake', 
                                      'trunk', 'reason', ['honor', 'honour'], 'subscribe', 'hops', 'among', 'blunder', 'skip', 'ratchet', 'canine', 'last', 'recess', 'smash', 'spectacular', 
-                                     'actor', 'mammal', 'stream', 'tackle', 'wide', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'law', 'ignite', 'twirl', 
-                                     'beaver', 'execute', 'deposit', 'separate', 'needle', 'imposter', 'marijuana']
+                                     'actor', 'mammal', 'stream', 'tackle', 'wide', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'land', 'ignite', 'twirl', 
+                                     'beaver', 'execute', 'deposit', 'separate', 'needle', 'imposter', 'marijuana', 'silo', 'chore', 'integrity']
                     },
                     {
                         'name': 'Orb Increase',
@@ -122,10 +122,10 @@ class TwitchBot(commands.Bot):
                         'triggers': ['glee', 'friends', 'arrow', 'scrubs', 'survivor', 'lost', 'cheers']
                     },
                     {
-                        'name': 'Ground Pound Only',
+                        'name': 'No Punch or Spin',
                         'theme': '"Wizard of Oz" Wishes',
-                        'command': "(set! (-> *TARGET-bank* punch-radius) (meters -1.0))(set! (-> *TARGET-bank* spin-radius) (meters -1.0))(set! (-> *TARGET-bank* uppercut-radius) (meters -1.0))",
-                        'command2': "(set! (-> *TARGET-bank* punch-radius) (meters 1.3))(set! (-> *TARGET-bank* spin-radius) (meters 2.2))(set! (-> *TARGET-bank* uppercut-radius) (meters 1))",
+                        'command': "(set! (-> *TARGET-bank* attack-timeout)(seconds 999999))",
+                        'command2': "(set! (-> *TARGET-bank* attack-timeout)(seconds 0.3))",
                         'triggers': ['home', 'heart', 'courage', 'brain'],
                         'toggle': False
                     },
@@ -273,7 +273,7 @@ class TwitchBot(commands.Bot):
                         'name': 'Rolljump Decrease',
                         'theme': 'Found on a Beach',
                         'command': f"(set! (-> *TARGET-bank* wheel-flip-dist) (- (-> *TARGET-bank* wheel-flip-dist) (meters {rolljump_inc})))",
-                        'triggers': ['wave', 'towel', 'shell', 'cooler', 'umbrella'],
+                        'triggers': ['wave', 'towel', 'shell', 'sand', 'umbrella'],
                     },
                     {
                         'name': 'No Textures',
@@ -315,6 +315,14 @@ class TwitchBot(commands.Bot):
                         'command': "(set! (-> *pc-settings* lod-force-tfrag) 2)(set! (-> *pc-settings* lod-force-tie) 3)(set! (-> *pc-settings* lod-force-ocean) 2)(set! (-> *pc-settings* lod-force-actor) 3)",
                         'command2': "(set! (-> *pc-settings* lod-force-tfrag) 0)(set! (-> *pc-settings* lod-force-tie) 0)(set! (-> *pc-settings* lod-force-ocean) 0)(set! (-> *pc-settings* lod-force-actor) 0)",
                         'triggers': ['blink', 'sum', 'republic', ['pilots', 'pilot'], 'maroon', 'eve'],
+                        'toggle': False
+                    },
+                    {
+                        'name': 'No Rolljumps',
+                        'theme': 'Things You Break',
+                        'command': "(set! (-> *TARGET-bank* wheel-jump-pre-window) (seconds 0))(set! (-> *TARGET-bank* wheel-jump-post-window) (seconds 0))",
+                        'command2': "(set! (-> *TARGET-bank* wheel-jump-pre-window) (seconds 1))(set! (-> *TARGET-bank* wheel-jump-post-window) (seconds 0.1))",
+                        'triggers': [['mold', 'mould'], 'ice', 'leg', 'chain', 'law', 'promise'],
                         'toggle': False
                     },
                     {
