@@ -38,7 +38,7 @@ blue_eco_inc = os.getenv('BLUE_ECO_INC')
 rolljump_inc = os.getenv('ROLLJUMP_INC')
 boosted_inc = os.getenv('BOOSTED_INC')
 iframes_inc = os.getenv('IFRAMES_INC')
-grav_inc = os.getenv('GRAVITY_INC')
+grav_mul = os.getenv('GRAVITY_MUL')
 
 mods = [channel, "mikegamepro"]
 
@@ -77,13 +77,13 @@ class TwitchBot(commands.Bot):
                     {
                         'name': 'Cell Increase',
                         'theme': "People's Names",
-                        'command': f"(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) {cell_inc})))",
-                        'triggers': ['grant', 'may', 'will', 'chase', 'wade', 'joy', 'bill', 'summer', 'hunter', 'chance', 'clay']
+                        'command': f"(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) {cell_inc})))",
+                        'triggers': ['grant', 'will', 'chase', 'wade', 'joy', 'bill', 'summer', 'hunter', 'chance', 'clay']
                     },
                     {
                         'name': 'Cell Decrease',
                         'theme': 'Landmine Words',
-                        'command': f"(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) {cell_inc})))",
+                        'command': f"(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) {cell_inc})))",
                         'triggers': ['whisper', 'mirage', 'octopus', 'paradox', 'cloud', 'consume', 'splendid', 'twitch', 'elevator', 'rocket', 
                                      'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 'robot', 'pencil', 
                                      'prawn', 'help', 'over', 'naughty', 'shake', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 
@@ -107,7 +107,7 @@ class TwitchBot(commands.Bot):
                         'name': 'Orb Decrease',
                         'theme': 'Basketball Terms',
                         'command': f"(set! (-> *game-info* money)(max 0.0 (- (-> *game-info* money) {orb_inc})))",
-                        'triggers': ['dribble', 'rebound', 'foul', 'assist', 'screen']
+                        'triggers': ['basket', 'rebound', 'foul', 'assist', 'screen']
                     },
                     {
                         'name': 'Jump Boost',
@@ -145,7 +145,7 @@ class TwitchBot(commands.Bot):
                         'name': 'Yellow Eco',
                         'theme': 'Before "Day"',
                         'command': "(send-event *target* 'get-pickup (pickup-type eco-yellow) 5.0)",
-                        'triggers': ['laundry', 'green', 'pay', 'birth', 'independence', 'sick', 'sun']
+                        'triggers': ['laundry', 'green', 'pay', 'birth', 'independence', 'sick', 'sun', 'may']
                     },
                     {
                         'name': 'Trip',
@@ -246,7 +246,7 @@ class TwitchBot(commands.Bot):
                         'theme': 'Sound Like Letters',
                         'command': "(set! (-> *stone-surface* slip-factor) 0.8)(set! (-> *stone-surface* transv-max) 1.3)(set! (-> *stone-surface* turnv) 0.56)(set! (-> *stone-surface* nonlin-fric-dist) 3600875.0)(set! (-> *stone-surface* fric) 23756.8)(set! (-> *grass-surface* slip-factor) 0.8)(set! (-> *grass-surface* transv-max) 1.3)(set! (-> *grass-surface* turnv) 0.56)(set! (-> *grass-surface* nonlin-fric-dist) 3600875.0)(set! (-> *grass-surface* fric) 26726.4)(set! (-> *ice-surface* slip-factor) 0.33)(set! (-> *ice-surface* nonlin-fric-dist) 7201750.0)(set! (-> *ice-surface* fric) 13363.4)",
                         'command2': "(set! (-> *stone-surface* slip-factor) 1.0)(set! (-> *stone-surface* transv-max) 1.0)(set! (-> *stone-surface* turnv) 1.0)(set! (-> *stone-surface* nonlin-fric-dist) 5120.0)(set! (-> *stone-surface* fric) 153600.0)(set! (-> *grass-surface* slip-factor) 1.0)(set! (-> *grass-surface* transv-max) 1.0)(set! (-> *grass-surface* turnv) 1.0)(set! (-> *grass-surface* nonlin-fric-dist) 4096.0)(set! (-> *grass-surface* fric) 122880.0)(set! (-> *ice-surface* slip-factor) 0.7)(set! (-> *ice-surface* nonlin-fric-dist) 4091904.0)(set! (-> *ice-surface* fric) 23756.8)",
-                        'triggers': ['bee', 'sea', 'eye', 'you', 'tea', 'are'],
+                        'triggers': ['bee', 'sea', 'eye', 'you', 'tea', 'are', 'why', 'cue'],
                         'toggle': False
                     },
                     {
@@ -300,13 +300,13 @@ class TwitchBot(commands.Bot):
                     {
                         'name': 'Gravity Increase',
                         'theme': 'Bowling',
-                        'command': f"(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {float(grav_inc)}))",
+                        'command': f"(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {float(grav_mul)}))",
                         'triggers': ['strike', ['pin', 'pins'], ['lane', 'lanes'], 'spare', 'turkey'],
                     },
                     {
                         'name': 'Gravity Decrease',
                         'theme': 'Types of Insurance',
-                        'command': f"(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {float(grav_inc)}))",
+                        'command': f"(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {float(grav_mul)}))",
                         'triggers': ['life', 'travel', 'health', 'dental', 'car'],
                     },
                     {
@@ -354,41 +354,53 @@ class TwitchBot(commands.Bot):
                     {
                         'name': 'Cell Bundle 1',
                         'theme': 'Wildcard 3',
-                        'command': "(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) 2)))",
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) 2)))",
                         'triggers': ['rainbow'],
                     },
                     {
                         'name': 'Cell Bundle 2',
                         'theme': 'Wildcard 4',
-                        'command': "(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) 2)))",
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) 2)))",
                         'triggers': ['domain'],
                     },
                     {
                         'name': 'Cell Bundle 3',
                         'theme': 'Wildcard 5',
-                        'command': "(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) 2)))",
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) 2)))",
                         'triggers': ['marble'],
                     },
                     {
                         'name': 'Cell Drain 1',
                         'theme': 'Wildcard 6',
-                        'command': "(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) 4)))",
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
                         'triggers': ['league'],
                     },
                     {
                         'name': 'Cell Drain 2',
                         'theme': 'Wildcard 7',
-                        'command': "(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) 4)))",
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
                         'triggers': ['partial'],
                     },
                     {
                         'name': 'Cell Drain 3',
                         'theme': 'Wildcard 8',
-                        'command': "(set! (-> *game-info* fuel)(max 0.0 (- (-> *game-info* fuel) 4)))",
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
                         'triggers': ['endure'],
+                    },
+                    {
+                        'name': 'Cell Drain 4',
+                        'theme': 'Wildcard 9',
+                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
+                        'triggers': ['response'],
                     },
                 ]
         self.effects_found = {}
+        self.count_sequence = 1
+        self.target_count = int(os.getenv('TARGET_COUNT'))  # Set target number to reward a power cell
+        self.user_cooldown_limit = int(os.getenv('USER_COOLDOWN'))  # Number of unique users needed for count sequence
+        self.max_count = int(os.getenv('MAX_COUNT'))
+        self.count_count = 0
+        self.recent_users = []  # Track last four users who counted
         self.goalc_process = None
         self.gk_process = None
         self.clientSocket = None
@@ -424,6 +436,9 @@ class TwitchBot(commands.Bot):
 
         chat_message = message.content.lower().strip()
         print(f"Received message: {chat_message}")
+        
+        # Check if the message is a valid number for the sequence
+        await self.check_count_sequence(chat_message, message.author.name)
 
         # Check for start and stop commands
         if chat_message == "!startgame" and message.author.name.lower() in mods:
@@ -445,6 +460,59 @@ class TwitchBot(commands.Bot):
         if self.active:
             user = message.author.name
             await self.handle_chat_message(chat_message, user)
+            
+    async def check_count_sequence(self, chat_message, user):
+        """Check if chat is counting correctly in sequence and reward if target reached."""
+        if not self.active or self.count_count >= self.max_count:
+            return  # Exit if word processing has not started
+
+        try:
+            # Attempt to convert the message to an integer
+            number = int(chat_message)
+            
+            # Check if the number matches the expected count
+            if number == self.count_sequence:
+                if user in self.recent_users:
+                    # If the user is among the last four users, don't allow counting
+                    if self.count_sequence > 2:
+                        await self.send_message(channel, "Sequence broken.")
+                    self.count_sequence = 1
+                    self.recent_users = []
+                    return
+
+                if number == self.target_count:
+                    # Reward a power cell if the target count is reached
+                    await self.send_message(channel, f"🎉 Chat reached {self.target_count} in sequence! +1 Power Cell! 🎉")
+                    self.send_form(f"(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) {cell_inc})))")
+                    self.count_count += 1
+                    if tts:
+                        speak(f"Chat reached {self.target_count} in sequence!")
+
+                    # Reset sequence and recent users list
+                    self.count_sequence = 1
+                    self.recent_users = []
+                else:
+                    # Increment the sequence for the next expected number and update recent users
+                    self.count_sequence += 1
+                    self.recent_users.append(user)
+                    
+                    # Maintain only the last four users in the list
+                    if len(self.recent_users) > self.user_cooldown_limit:
+                        self.recent_users.pop(0)
+
+            else:
+                # If number is incorrect, reset the sequence (only announce if past 1)
+                if self.count_sequence > 2:
+                    await self.send_message(channel, "Sequence broken.")
+                self.count_sequence = 1
+                self.recent_users = []
+
+        except ValueError:
+            # If the message isn't a number, reset the sequence (only announce if past 1)
+            if self.count_sequence > 2:
+                await self.send_message(channel, "Sequence broken.")
+            self.count_sequence = 1
+            self.recent_users = []
 
     # Handle chat messages and word processing
     async def handle_chat_message(self, chat_message, user):
@@ -483,7 +551,7 @@ class TwitchBot(commands.Bot):
             # Check if all words for this effect have been found, and give the reward if not already completed
             if len(self.effects_found[effect['name']]['words']) == len(effect['triggers']) and not self.effects_found[effect['name']]['completed']:
                 await self.send_message(channel, f"All words found for {effect['name']} ({effect['theme']})!")
-                self.send_form(f"(set! (-> *game-info* fuel)(max 0.0 (+ (-> *game-info* fuel) {cell_inc})))")
+                self.send_form(f"(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) {cell_inc})))")
 
                 if tts:
                     speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
@@ -511,7 +579,7 @@ class TwitchBot(commands.Bot):
                 # Show all found words even if the theme is completed
                 found_words_str = ", ".join(found_words)
                 total_words = len(effect['triggers'])
-                completed_status = " (All words found!)" if effect_data['completed'] else f" ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})"
+                completed_status = f" ({effect['theme']})" if effect_data['completed'] else f" ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})"
                 await self.send_message(channel, f"{effect['name']}: {found_words_str}{completed_status}")
                 return  # Exit after handling the correct command
 
