@@ -12,33 +12,39 @@ from twitchio.ext import commands
 from dotenv import load_dotenv
 import asyncio
 import sys
+import json
 
 # Initialize text-to-speech engine
 engine = pyttsx3.init()
 engine.setProperty('rate', 200)
 def speak(text):
-    print("saying in TTS: " + text)
-    engine.say(text)
-    engine.runAndWait()
+    if tts:
+        print("saying in TTS: " + text)
+        engine.say(text)
+        engine.runAndWait()
 
 # Load environment variables from chatgame.env
 load_dotenv(dotenv_path='chatgame.env')
 
-# Fetch OAuth token and channel from environment variables
+# Fetch environment variables with default values
 oauth_token = os.getenv('TWITCH_OAUTH_TOKEN')
 channel = os.getenv('TWITCH_USERNAME')
-tts = os.getenv('TTS') != "f"
-cell_inc = os.getenv('CELL_INC')
-orb_inc = os.getenv('ORB_INC')
-speed_inc = os.getenv('SPEED_INC')
-jump_inc = os.getenv('JUMP_INC')
-slip_res_inc = os.getenv('SLIP_RES_INC')
-size_inc = os.getenv('SIZE_INC')
-blue_eco_inc = os.getenv('BLUE_ECO_INC')
-rolljump_inc = os.getenv('ROLLJUMP_INC')
-boosted_inc = os.getenv('BOOSTED_INC')
-iframes_inc = os.getenv('IFRAMES_INC')
-grav_mul = os.getenv('GRAVITY_MUL')
+tts = os.getenv('TTS', 't').lower() != "f"
+min_cell_count = float(os.getenv('MIN_CELL_COUNT', -10))
+cell_inc = int(os.getenv('CELL_INC', 1))
+cell_bundle = int(os.getenv('CELL_BUNDLE', 2))
+cell_drain = int(os.getenv('CELL_DRAIN', 4))
+orb_inc = int(os.getenv('ORB_INC', 90))
+speed_inc = float(os.getenv('SPEED_INC', 2.2))
+jump_inc = float(os.getenv('JUMP_INC', 1.0))
+slip_res_inc = float(os.getenv('SLIP_RES_INC', 0.5))
+size_inc = float(os.getenv('SIZE_INC', 0.15))
+blue_eco_inc = float(os.getenv('BLUE_ECO_INC', 5.0))
+rolljump_inc = float(os.getenv('ROLLJUMP_INC', 2.0))
+boosted_inc = float(os.getenv('BOOSTED_INC', 8500.0))
+iframes_inc = float(os.getenv('IFRAMES_INC', 1.0))
+spin_inc = float(os.getenv('SPIN_INC', 1.0))
+grav_mul = float(os.getenv('GRAVITY_MUL', 1.2))
 
 mods = [channel, "mikegamepro"]
 
@@ -65,278 +71,280 @@ chat_test = False
 class TwitchBot(commands.Bot):
     def __init__(self):
         super().__init__(token=oauth_token, prefix='!', initial_channels=[channel])
-        self.words_used = set()  # Store words that have already been used
+        self.words_used = set()
         # Define effects and the words that trigger them
         self.effects = [
                     {
                         'name': 'Death',
-                        'theme': 'UNSC Vehicles',
+                        'theme': 'Twitch',
                         'command': lambda: f"(when (not (movie?))(target-attack-up *target* 'attack '{random.choice(death_list)}))",
-                        'triggers': ['warthog', 'mongoose', 'elephant', 'mammoth', 'scorpion', 'falcon', 'rhino', 'pelican', 'hornet']
+                        'triggers': [['bit', 'bits'], 'chat', 'stream', 'subscribe', 'buffer', 'raid', 'follow', 'amazon', 'live', 'channel']
                     },
                     {
                         'name': 'Cell Increase',
-                        'theme': "People's Names",
-                        'command': f"(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) {cell_inc})))",
-                        'triggers': ['grant', 'will', 'chase', 'wade', 'joy', 'bill', 'summer', 'hunter', 'chance', 'clay']
+                        'theme': "The 'G' is Silent",
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_inc})))",
+                        'triggers': ['weigh', 'sleigh', 'champagne', 'design', 'gnat', 'gnaw', 'gnome', 'sign', 'align', 'reign', 'light', 'though', 'sigh', 'benign', 'foreign', 'campaign', 'resign']
                     },
                     {
                         'name': 'Cell Decrease',
                         'theme': 'Landmine Words',
-                        'command': f"(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) {cell_inc})))",
-                        'triggers': ['whisper', 'mirage', 'octopus', 'paradox', 'cloud', 'consume', 'splendid', 'twitch', 'elevator', 'rocket', 
-                                     'pillow', 'puzzle', 'sneeze', 'disaster', 'glove', 'soda', 'revolution', 'ghost', 'prince', 'volcano', 'robot', 'pencil', 
-                                     'prawn', 'help', 'over', 'naughty', 'shake', 'think', 'under', 'cope', 'strategy', 'lobster', 'chandelier', 'archipelago', 
-                                     'omega', 'cell', 'leave', 'hospital', 'doctor', 'geologist', 'money', 'mine', 'secret', 'fart', 'homicide', 'cringe', 'napkin', 
-                                     'ban', 'run', 'chair', 'cat', 'rain', 'horse', 'chat', 'grandmother', 'gamble', 'hello' ,'spoiler', 'geyser', 'path', 'precursor', 
-                                     'cousin', 'niece', 'nephew', 'fly', 'battery', 'perfect', 'time', 'zoom', 'speed', 'industrial', 'outrageous', 'what', 'orbs', 
-                                     'agriculture', 'laugh', 'dinner', 'breakfast', 'buffalo', 'crack', 'epic', 'happy', 'orange', 'indigo', 'bronze', 'homework', 
-                                     'teacher', 'manslaughter', 'mercury', 'day', 'gamer', 'stellar', 'scatter', 'hype', 'fresh', 'drink', 'electric', 'bound', 
-                                     'weiner', 'half', 'muse', 'misty', 'camera', 'hue', 'log', 'please', 'rhyme', 'search', 'fix', 'wait', 'prison', 'mistake', 
-                                     'trunk', 'reason', ['honor', 'honour'], 'subscribe', 'hops', 'among', 'blunder', 'skip', 'ratchet', 'canine', 'last', 'recess', 'smash', 'spectacular', 
-                                     'actor', 'mammal', 'stream', 'tackle', 'wide', 'tennis', 'professional', 'fake', 'upgrade', 'road', 'pain', 'land', 'ignite', 'twirl', 
-                                     'beaver', 'execute', 'deposit', 'separate', 'needle', 'imposter', 'marijuana', 'silo', 'chore', 'integrity']
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_inc})))",
+                        'triggers': ['little', 'sting', 'sketch', 'debate', 'luggage', 'envelope', 'magnet', 'circus', 'calculator', 'quantum', 
+                                     'helicopter', 'paradox', 'ink', 'bell', 'glove', 'hypothesis', 'chair', 'infinity', 'random', 'rhombus', 'science', 'flute', 
+                                     'thank', 'radio', 'scrub', 'giraffe', 'trampoline', 'canyon', 'combat', 'statue', 'monopoly', 'dinosaur', 'ruler', 'helmet', 
+                                     'omega', 'library', 'spectrum', 'mushroom', 'clown', 'universe', 'matrix', 'chemistry', 'equation', 'compass', 'fog', 'recipe', 'ingredient', 
+                                     'alarm', 'cake', 'angry', 'glacier', 'active', 'velvet', 'potion', 'podium', 'landmine', 'hello' ,'spoon', 'puddle', 'violin', 'portrait', 
+                                     'quick', 'lantern', 'opposite', 'mad', 'zero', 'last', 'third', 'tomb', 'speed', 'industrial', 'outrage', 'what', 'prawn', 
+                                     'agriculture', 'flock', 'mango', 'pigeon', 'project', 'crack', 'first', 'happy', 'yellow', 'confused', 'bronze', 'work', 
+                                     'teacher', 'manslaughter', 'mercury', 'ray', 'gamer', 'general', 'scatter', 'visit', 'fresh', 'phosphate', 'electric', 'bound', 
+                                     'weiner', 'suffer', 'supercalifragilisticexpialidocious']
                     },
                     {
                         'name': 'Orb Increase',
-                        'theme': 'Underground Creatures',
-                        'command': f"(set! (-> *game-info* money)(max 0.0 (+ (-> *game-info* money) {orb_inc})))",
-                        'triggers': [['mole', 'moles'], 'earthworm', ['ant', 'ants'], 'badger', 'gopher', ['termite', 'termites'], 'groundhog']
+                        'theme': 'Pirate',
+                        'command': f"(set! (-> *game-info* money)(max -90.0 (+ (-> *game-info* money) {orb_inc})))",
+                        'triggers': ['plank', 'peg', 'cannon', 'parrot', 'rum', 'captain', 'treasure', 'hook']
                     },
                     {
                         'name': 'Orb Decrease',
-                        'theme': 'Basketball Terms',
-                        'command': f"(set! (-> *game-info* money)(max 0.0 (- (-> *game-info* money) {orb_inc})))",
-                        'triggers': ['basket', 'rebound', 'foul', 'assist', 'screen']
+                        'theme': 'Periods of Time',
+                        'command': f"(set! (-> *game-info* money)(max -90.0 (- (-> *game-info* money) {orb_inc})))",
+                        'triggers': ['century', 'fortnight', 'year', 'day', 'month', 'second', 'eon', 'hour']
                     },
                     {
                         'name': 'Jump Boost',
-                        'theme': 'Minecraft Items',
+                        'theme': 'Windows Commands',
                         'command': f"(set! (-> *TARGET-bank* jump-height-max)(+ (-> *TARGET-bank* jump-height-max) (meters {jump_inc})))(set! (-> *TARGET-bank* double-jump-height-max)(+ (-> *TARGET-bank* double-jump-height-max) (meters {jump_inc})))",
-                        'triggers': ['furnace', 'bed', 'bucket', 'wool', 'coal', 'iron', 'obsidian']
+                        'triggers': ['cut', 'paste', 'undo', 'print', 'find', 'copy', 'save']
                     },
                     {
                         'name': 'Speed Boost',
-                        'theme': 'TV Shows',
+                        'theme': 'Elements of Art',
                         'command': f"(set! (-> *walk-mods* target-speed) (+ (-> *walk-mods* target-speed) (meters {speed_inc})))(set! (-> *double-jump-mods* target-speed) (+ (-> *double-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *jump-mods* target-speed) (+ (-> *jump-mods* target-speed) (meters {speed_inc})))(set! (-> *jump-attack-mods* target-speed) (+ (-> *jump-attack-mods* target-speed) (meters {speed_inc})))(set! (-> *attack-mods* target-speed) (+ (-> *attack-mods* target-speed) (meters {speed_inc})))(set! (-> *forward-high-jump-mods* target-speed) (+ (-> *forward-high-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *flip-jump-mods* target-speed) (+ (-> *flip-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *high-jump-mods* target-speed) (+ (-> *high-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *smack-jump-mods* target-speed) (+ (-> *smack-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *duck-attack-mods* target-speed) (+ (-> *duck-attack-mods* target-speed) (meters {speed_inc})))(set! (-> *flop-mods* target-speed) (+ (-> *flop-mods* target-speed) (meters {speed_inc})))",
-                        'triggers': ['glee', 'friends', 'arrow', 'scrubs', 'survivor', 'lost', 'cheers']
+                        'triggers': ['line', 'shape', 'texture', 'form', 'space', 'value', ['color', 'colour']]
                     },
                     {
                         'name': 'No Punch or Spin',
-                        'theme': '"Wizard of Oz" Wishes',
+                        'theme': 'Things That Come Back',
                         'command': "(set! (-> *TARGET-bank* attack-timeout)(seconds 999999))",
                         'command2': "(set! (-> *TARGET-bank* attack-timeout)(seconds 0.3))",
-                        'triggers': ['home', 'heart', 'courage', 'brain'],
+                        'triggers': ['echo', 'reflection', 'boomerang', 'karma'],
                         'toggle': False
                     },
                     {
                         'name': 'Blue Eco',
-                        'theme': 'Pokémon Games',
+                        'theme': 'Counter-Strike Maps',
                         'command': "(send-event *target* 'get-pickup (pickup-type eco-blue) 5.0)",
-                        'triggers': ['blue', 'silver', 'crystal', 'emerald', 'sapphire', 'diamond', 'platinum', 'white', 'moon', 'sword', 'violet']
+                        'triggers': ['dust', 'inferno', 'mirage', 'nuke', 'train', 'office', 'cache', 'overpass', 'cobblestone', 'ancient', 'vertigo']
                     },
                     {
                         'name': 'Red Eco',
-                        'theme': 'Animal Groups',
+                        'theme': 'Start of U.S. State Names',
                         'command': "(send-event *target* 'get-pickup (pickup-type eco-red) 5.0)",
-                        'triggers': ['murder', 'parliament', 'gaggle', 'school', 'drove', 'pride', 'flock', 'pack']
+                        'triggers': ['wash', 'miss', 'ten', 'pen', 'main', 'ill', 'ark', 'color', 'mass', 'ore', 'alas']
                     },
                     {
                         'name': 'Yellow Eco',
-                        'theme': 'Before "Day"',
+                        'theme': 'After "Great"',
                         'command': "(send-event *target* 'get-pickup (pickup-type eco-yellow) 5.0)",
-                        'triggers': ['laundry', 'green', 'pay', 'birth', 'independence', 'sick', 'sun', 'may']
+                        'triggers': [['expectations', 'expectation'], ['pyramid', 'pyramids'], 'escape', 'depression', ['lake', 'lakes'], 'plains', 'wall']
                     },
                     {
                         'name': 'Trip',
-                        'theme': 'Palindromes',
+                        'theme': 'Disney Films',
                         'command': "(send-event *target* 'loading)",
-                        'triggers': ['noon', 'kayak', 'radar', 'racecar', 'refer', 'level', 'civic', 'deified', 'tenet', 'madam', 'rotor']
+                        'triggers': ['pan', 'snow', 'lion', 'tangled', 'frozen', 'lady', 'beauty', 'mermaid', 'fantasia', 'stitch', 'jungle']
                     },
                     {
                         'name': 'BOOM',
-                        'theme': 'Found in a Courtroom',
+                        'theme': 'Jak 3 Locations',
                         'command': lambda: f"(sound-play \"{random.choice(boom_list)}\")",
-                        'triggers': ['judge', 'jury', 'witness', 'bailiff', 'gavel', 'defendant', 'plaintiff', 'podium', 'bench', 'attorney', 'record', 'evidence']
+                        'triggers': ['nest', 'ship', ['mine', 'mines'], 'haven', 'volcano', 'oasis', 'port', 'course', 'temple', ['sewers', 'sewer'], 'factory', 'palace']
                     },
                     {
                         'name': 'Invulnerability',
-                        'theme': 'Types of Piles',
-                        'command': "(set! (-> *pc-settings* speedrunner-mode?) #f)(begin (logior! (-> *pc-settings* cheats) (pc-cheats invinc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats invinc)))",
+                        'theme': 'Story Elements',
+                        'command': "(begin (logior! (-> *pc-settings* cheats) (pc-cheats invinc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats invinc)))",
                         'command2': "(logclear! (-> *pc-settings* cheats) (pc-cheats invinc))(logclear! (-> *target* state-flags) (state-flags invulnerable))",
-                        'triggers': ['snow', 'dog', 'dirt', 'leaf', 'trash'],
+                        'triggers': ['character', 'setting', 'plot', 'conflict', 'climax' 'resolution'],
                         'toggle': False
-                    },
-                    {
-                        'name': 'Rapid Fire',
-                        'theme': 'Wildcard 2',
-                        'command': "(set! (-> *TARGET-bank* yellow-projectile-speed) (meters 100))(set! (-> *TARGET-bank* yellow-attack-timeout) (seconds 0))",
-                        'triggers': ['regret']
                     },
                     {
                         'name': 'Damage',
-                        'theme': 'Movie Genres',
+                        'theme': 'Jak Runners',
                         'command': "(if (not (= *target* #f))(target-attack-up *target* 'attack 'burnup))",
-                        'triggers': ['action', 'comedy', 'drama', 'horror', 'thriller', 'romantic', 'adventure', 'mystery', 'fantasy', 'documentary', 'musical', 'western']
+                        'triggers': ['bin', 'vortex', 'stellar', 'headstrong', 'flu', 'bob', 'wed', 'goofy', 'jazz', 'usual', 'six', 'scar', 'blue', 'boomer', 'zed']
                     },
                     {
                         'name': 'Slip Resistance',
-                        'theme': 'Synonyms of "Ridiculous"',
-                        'command': f"(set! (-> *pat-mode-info* 1 wall-angle) (max 0.0 (- (-> *pat-mode-info* 1 wall-angle) {float(slip_res_inc)})))(set! (-> *pat-mode-info* 2 wall-angle) (max 0.0 (- (-> *pat-mode-info* 2 wall-angle) {float(slip_res_inc) / 2.44})))",
-                        'triggers': ['absurd', 'preposterous', 'ludicrous', 'outlandish']
+                        'theme': 'Better Late Than Never',
+                        'command': f"(set! (-> *pat-mode-info* 1 wall-angle) (max 0.0 (- (-> *pat-mode-info* 1 wall-angle) {slip_res_inc})))(set! (-> *pat-mode-info* 2 wall-angle) (max 0.0 (- (-> *pat-mode-info* 2 wall-angle) {slip_res_inc / 2.44})))",
+                        'triggers': ['better', 'late', 'than', 'never']
                     },
                     {
                         'name': 'I-Frames Increase',
-                        'theme': 'Avengers',
-                        'command': f"(set! (-> *TARGET-bank* hit-invulnerable-timeout) (+ (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {float(iframes_inc)})))",
-                        'triggers': ['captain', 'hawk', 'spider', 'widow', 'panther', 'hulk']
+                        'theme': 'Baseball Terms',
+                        'command': f"(set! (-> *TARGET-bank* hit-invulnerable-timeout) (+ (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {iframes_inc})))",
+                        'triggers': ['base', 'field', 'bunt', 'pitch', 'mound', 'strike']
                     },
                     {
                         'name': 'I-Frames Decrease',
-                        'theme': 'Vampire',
-                        'command': f"(set! (-> *TARGET-bank* hit-invulnerable-timeout) (- (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {float(iframes_inc)})))",
-                        'triggers': ['garlic', 'blood', 'cape']
+                        'theme': 'After "Foot"',
+                        'command': f"(set! (-> *TARGET-bank* hit-invulnerable-timeout) (- (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {iframes_inc})))",
+                        'triggers': ['loose', 'print', 'step']
                     },
                     {
                         'name': 'Mirror World',
-                        'theme': 'Carnival',
-                        'command': "(set! (-> *pc-settings* speedrunner-mode?) #f)(begin (logior! (-> *pc-settings* cheats) (pc-cheats mirror)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats mirror)))",
+                        'theme': 'Found in a Construction Site',
+                        'command': "(begin (logior! (-> *pc-settings* cheats) (pc-cheats mirror)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats mirror)))",
                         'command2': "(logclear! (-> *pc-settings* cheats) (pc-cheats mirror))",
-                        'triggers': ['cotton', 'carousel', 'paint', 'acrobat'],
+                        'triggers': ['crane', 'cement', 'hammer', 'beam'],
                         'toggle': False
                     },
-                    #{
-                    #    'name': 'Size Increase',
-                    #    'theme': 'none',
-                    #    'command': f"(set! *custom-scale* (+ *custom-scale* {size_inc}))(set! (-> (-> (the-as target *target* )root)scale x) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale y) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale z) *custom-scale*)",
-                    #    'triggers': ['mm', 'nn', 'oo', 'pp'],
-                    #},
-                    #{
-                    #    'name': 'Size Decrease',
-                    #    'theme': 'none',
-                    #    'command': f"(set! *custom-scale* (- *custom-scale* {size_inc}))(set! (-> (-> (the-as target *target* )root)scale x) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale y) *custom-scale*)(set! (-> (-> (the-as target *target* )root)scale z) *custom-scale*)",
-                    #    'triggers': ['qq', 'rr', 'ss', 'tt'],
-                    #},
                     {
                         'name': 'Inverted Camera',
-                        'theme': 'Gardening Tasks',
+                        'theme': 'Prison',
                         'command': f"(set! (-> *pc-settings* third-camera-h-inverted?) (not (-> *pc-settings* third-camera-h-inverted?)))",
-                        'triggers': ['harvest', 'mulch', 'compost', 'weed', 'water', 'plant'],
+                        'triggers': ['cell', 'warden', 'convict', 'guard', 'sentence', 'bail'],
                     },
                     {
                         'name': 'Random Checkpoint',
-                        'theme': 'Many Meanings',
+                        'theme': 'Ways to Say "Eat"',
                         'command': lambda: f"(start 'play (get-continue-by-name *game-info* \"{point_list[random.choice(range(0,52))]}\"))(auto-save-command 'auto-save 0 0 *default-pool*)",
-                        'triggers': ['well', 'bat', 'lead', 'light', 'spring', 'match', 'date', 'bowl', 'seal'],
+                        'triggers': ['consume', 'devour', 'ingest', 'feast', 'scarf', 'gorge', 'partake', 'dine'],
                     },
                     {
                         'name': 'Blue Eco Range Increase',
-                        'theme': 'Musical Terms',
+                        'theme': 'Things You Take',
                         'command': f"(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (+ (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (+ (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-                        'triggers': ['vibrato', 'chord', 'sonata', 'harmony', 'arpeggio', 'cadence', 'melody', 'scale', 'key', 'tempo', 'chorus'],
+                        'triggers': ['break', 'chance', 'look', 'bite', 'seat', 'stand', 'breath', 'hike', 'risk', 'nap', 'pill', 'hint'],
                     },
                     {
                         'name': 'Blue Eco Range Decrease',
-                        'theme': 'Things That Are Purple',
+                        'theme': 'Things That Spin',
                         'command': f"(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (- (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (- (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-                        'triggers': ['grimace', 'eggplant', 'lavender', 'amethyst'],
+                        'triggers': ['globe', 'top', 'wheel', 'fan'],
                     },
                     {
                         'name': 'Slippery Ground',
-                        'theme': 'Sound Like Letters',
+                        'theme': "Doctor's Office",
                         'command': "(set! (-> *stone-surface* slip-factor) 0.8)(set! (-> *stone-surface* transv-max) 1.3)(set! (-> *stone-surface* turnv) 0.56)(set! (-> *stone-surface* nonlin-fric-dist) 3600875.0)(set! (-> *stone-surface* fric) 23756.8)(set! (-> *grass-surface* slip-factor) 0.8)(set! (-> *grass-surface* transv-max) 1.3)(set! (-> *grass-surface* turnv) 0.56)(set! (-> *grass-surface* nonlin-fric-dist) 3600875.0)(set! (-> *grass-surface* fric) 26726.4)(set! (-> *ice-surface* slip-factor) 0.33)(set! (-> *ice-surface* nonlin-fric-dist) 7201750.0)(set! (-> *ice-surface* fric) 13363.4)",
                         'command2': "(set! (-> *stone-surface* slip-factor) 1.0)(set! (-> *stone-surface* transv-max) 1.0)(set! (-> *stone-surface* turnv) 1.0)(set! (-> *stone-surface* nonlin-fric-dist) 5120.0)(set! (-> *stone-surface* fric) 153600.0)(set! (-> *grass-surface* slip-factor) 1.0)(set! (-> *grass-surface* transv-max) 1.0)(set! (-> *grass-surface* turnv) 1.0)(set! (-> *grass-surface* nonlin-fric-dist) 4096.0)(set! (-> *grass-surface* fric) 122880.0)(set! (-> *ice-surface* slip-factor) 0.7)(set! (-> *ice-surface* nonlin-fric-dist) 4091904.0)(set! (-> *ice-surface* fric) 23756.8)",
-                        'triggers': ['bee', 'sea', 'eye', 'you', 'tea', 'are', 'why', 'cue'],
+                        'triggers': ['prescription', 'exam', 'nurse', 'diagnosis', 'appointment', 'bandage', 'referral', 'vaccine'],
                         'toggle': False
                     },
                     {
                         'name': 'No Ledge Grabs',
-                        'theme': 'Nonviolent Crimes',
+                        'theme': 'Game Environments',
                         'command': "(set! (-> *collide-edge-work* max-dir-cosa-delta) 999.0)",
                         'command2': "(set! (-> *collide-edge-work* max-dir-cosa-delta) 0.6)",
-                        'triggers': ['fraud', 'embezzlement', 'possession', 'forgery'],
+                        'triggers': ['stage', 'level', 'world', 'zone'],
                         'toggle': False
                     },
                     {
                         'name': 'Deload Level',
-                        'theme': 'Immediate Relatives',
-                        'command': "(when (not (movie?))(set! (-> *load-state* want 0 display?) #f))",
-                        'triggers': ['brother', 'daughter', 'father', 'sister', 'mother', 'son'],
+                        'theme': 'NATO Phonetic Alphabet',
+                        'command': "(when (not (movie?))(set! (-> *load-state* want 0 display?) #f)(set! (-> *load-state* want 1 display?) #f))",
+                        'triggers': ['golf', 'november', 'victor', 'whiskey', 'hotel', 'uniform'],
                     },
                     {
                         'name': 'Rolljump Increase',
-                        'theme': 'College Majors',
+                        'theme': 'Units of Measurement',
                         'command': f"(set! (-> *TARGET-bank* wheel-flip-dist) (+ (meters {rolljump_inc}) (-> *TARGET-bank* wheel-flip-dist)))",
-                        'triggers': ['psychology', 'biology', 'engineering', 'nursing', 'history', 'english', 'economics', 'education'],
+                        'triggers': ['pressure', 'force', 'speed', 'temperature', 'area', 'volume', 'weight', 'distance'],
                     },
                     {
                         'name': 'Rolljump Decrease',
-                        'theme': 'Found on a Beach',
+                        'theme': 'Common Pet Names',
                         'command': f"(set! (-> *TARGET-bank* wheel-flip-dist) (- (-> *TARGET-bank* wheel-flip-dist) (meters {rolljump_inc})))",
-                        'triggers': ['wave', 'towel', 'shell', 'sand', 'umbrella'],
+                        'triggers': ['buddy', 'lucky', 'mittens', 'fluffy', 'biscuit'],
                     },
                     {
                         'name': 'No Textures',
-                        'theme': 'Before "Mate"',
-                        'command': "(set! (-> *pc-settings* speedrunner-mode?) #f)(begin (logior! (-> *pc-settings* cheats) (pc-cheats no-tex)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats no-tex)))",
+                        'theme': 'Types of Bears',
+                        'command': "(begin (logior! (-> *pc-settings* cheats) (pc-cheats no-tex)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats no-tex)))",
                         'command2': "(logclear! (-> *pc-settings* cheats) (pc-cheats no-tex))",
-                        'triggers': ['soul', 'class', 'team', 'check', 'room', 'play'],
+                        'triggers': ['grizzly', 'black', 'brown', 'gummy', 'panda', 'polar'],
                         'toggle': False
                     },
                     {
                         'name': 'Big Head NPCs',
-                        'theme': 'Last Word of Jak 1 Levels',
-                        'command': "(set! (-> *pc-settings* speedrunner-mode?) #f)(begin (logior! (-> *pc-settings* cheats) (pc-cheats big-head-npc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats big-head-npc)))",
+                        'theme': 'Homophones',
+                        'command': "(begin (logior! (-> *pc-settings* cheats) (pc-cheats big-head-npc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats big-head-npc)))",
                         'command2': "(logclear! (-> *pc-settings* cheats) (pc-cheats big-head-npc))",
-                        'triggers': ['rock', 'village', 'island', 'city', 'basin', 'swamp', 'crater', 'citadel', 'tube', 'jungle', 'canyon', 'beach', 'cave', 'mountain', 'pass'],
+                        'triggers': ['bare', 'flour', 'higher', 'write', 'peace', 'blew', 'knight', 'weak', 'allowed', 'stair', 'reign', 'eight', 'board', 'cereal', 'knot', "manor", "suite"],
+                        'toggle': False
+                    },
+                    {
+                        'name': 'Head Size',
+                        'theme': 'Game Shows',
+                        'command': lambda: random.choice(["(begin (logior! (-> *pc-settings* cheats) (pc-cheats big-head)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats big-head)))",
+                                            "(begin (logior! (-> *pc-settings* cheats) (pc-cheats small-head)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats small-head)))"]),
+                        'command2': "(logclear! (-> *pc-settings* cheats) (pc-cheats small-head))(logclear! (-> *pc-settings* cheats) (pc-cheats big-head))",
+                        'triggers': ['feud', 'jeopardy', 'fortune', 'millionaire', 'price', 'deal', 'password', 'match'],
                         'toggle': False
                     },
                     {
                         'name': 'Boosted Decrease',
-                        'theme': 'Types of Clocks',
-                        'command': f"(set! (-> *edge-surface* fric) (+ {float(boosted_inc)} (-> *edge-surface* fric)))",
-                        'triggers': ['grandfather', 'cuckoo', 'alarm'],
+                        'theme': 'Methods of Unlocking',
+                        'command': f"(set! (-> *edge-surface* fric) (+ {boosted_inc} (-> *edge-surface* fric)))",
+                        'triggers': ['key', 'code', 'scan'],
                     },
                     {
                         'name': 'Gravity Increase',
-                        'theme': 'Bowling',
-                        'command': f"(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {float(grav_mul)}))",
-                        'triggers': ['strike', ['pin', 'pins'], ['lane', 'lanes'], 'spare', 'turkey'],
+                        'theme': 'Synonyms of "Ridiculous"',
+                        'command': f"(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {grav_mul}))",
+                        'triggers': ['absurd', 'preposterous', 'ludicrous', 'outlandish', 'outrageous'],
                     },
                     {
                         'name': 'Gravity Decrease',
-                        'theme': 'Types of Insurance',
-                        'command': f"(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {float(grav_mul)}))",
-                        'triggers': ['life', 'travel', 'health', 'dental', 'car'],
+                        'theme': 'Done While Driving',
+                        'command': f"(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {grav_mul}))",
+                        'triggers': ['merge', 'brake', 'accelerate', 'signal', 'steer'],
                     },
                     {
                         'name': 'Low Poly',
-                        'theme': 'Bands Without The Number',
+                        'theme': 'Types of Wrenches',
                         'command': "(set! (-> *pc-settings* lod-force-tfrag) 2)(set! (-> *pc-settings* lod-force-tie) 3)(set! (-> *pc-settings* lod-force-ocean) 2)(set! (-> *pc-settings* lod-force-actor) 3)",
                         'command2': "(set! (-> *pc-settings* lod-force-tfrag) 0)(set! (-> *pc-settings* lod-force-tie) 0)(set! (-> *pc-settings* lod-force-ocean) 0)(set! (-> *pc-settings* lod-force-actor) 0)",
-                        'triggers': ['blink', 'sum', 'republic', ['pilots', 'pilot'], 'maroon', 'eve'],
+                        'triggers': ['pipe', 'monkey', 'socket', 'torque', 'combination', 'lug'],
                         'toggle': False
                     },
                     {
                         'name': 'No Rolljumps',
-                        'theme': 'Things You Break',
+                        'theme': 'Team Fortress 2 Classes',
                         'command': "(set! (-> *TARGET-bank* wheel-jump-pre-window) (seconds 0))(set! (-> *TARGET-bank* wheel-jump-post-window) (seconds 0))",
                         'command2': "(set! (-> *TARGET-bank* wheel-jump-pre-window) (seconds 1))(set! (-> *TARGET-bank* wheel-jump-post-window) (seconds 0.1))",
-                        'triggers': [['mold', 'mould'], 'ice', 'leg', 'chain', 'law', 'promise'],
+                        'triggers': ['medic', 'spy', 'scout', 'heavy', 'engineer', 'soldier'],
                         'toggle': False
                     },
                     {
                         'name': 'Boosted Increase',
-                        'theme': 'Math Results',
-                        'command': f"(set! (-> *edge-surface* fric) (- (-> *edge-surface* fric) {float(boosted_inc)}))",
-                        'triggers': ['product', 'remainder', 'difference', 'quotient', 'power'],
+                        'theme': 'Before "Ware"',
+                        'command': f"(set! (-> *edge-surface* fric) (- (-> *edge-surface* fric) {boosted_inc}))",
+                        'triggers': ['silver', 'soft', 'hard', 'glass', 'firm'],
+                    },
+                    {
+                        'name': 'Spin Radius Increase',
+                        'theme': 'Internet Browsers',
+                        'command': f"(set! (-> *TARGET-bank* spin-radius) (+ (meters {spin_inc}) (-> *TARGET-bank* spin-radius)))",
+                        'triggers': ['opera', 'safari', 'chrome', 'edge'],
                     },
                     {
                         'name': 'No Daxter',
-                        'theme': 'Board Games',
+                        'theme': 'Types of Energy',
                         'command': "(send-event *target* 'sidekick #f)",
                         'command2': "(send-event *target* 'sidekick #t)",
-                        'triggers': ['clue', 'risk', 'monopoly', 'battleship'],
+                        'triggers': ['kinetic', 'potential', 'thermal', 'chemical'],
+                        'toggle': False
+                    },
+                    {
+                        'name': 'Short Fall',
+                        'theme': 'Deodorants',
+                        'command': "(set! (-> *TARGET-bank* fall-far) (meters 7))(set! (-> *TARGET-bank* fall-far-inc) (meters 15))",
+                        'command2': "(set! (-> *TARGET-bank* fall-far) (meters 30))(set! (-> *TARGET-bank* fall-far-inc) (meters 20))",
+                        'triggers': ['degree', 'axe', 'dove', 'spice'],
                         'toggle': False
                     },
                     {
@@ -346,68 +354,115 @@ class TwitchBot(commands.Bot):
                         'triggers': ['poop'],
                     },
                     {
-                        'name': 'Back 2 Geyser',
+                        'name': 'Rapid Fire',
                         'theme': 'Wildcard 1',
+                        'command': "(set! (-> *TARGET-bank* yellow-projectile-speed) (meters 100))(set! (-> *TARGET-bank* yellow-attack-timeout) (seconds 0))",
+                        'triggers': ['stain']
+                    },
+                    {
+                        'name': 'Back 2 Geyser',
+                        'theme': 'Wildcard 2',
                         'command': "(start 'play (get-continue-by-name *game-info* \"intro-start\"))(auto-save-command 'auto-save 0 0 *default-pool*)",
-                        'triggers': ['ingredient'],
+                        'triggers': ['refuse', 'prevent'],
                     },
                     {
                         'name': 'Cell Bundle 1',
                         'theme': 'Wildcard 3',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) 2)))",
-                        'triggers': ['rainbow'],
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
+                        'triggers': ['position'],
                     },
                     {
                         'name': 'Cell Bundle 2',
                         'theme': 'Wildcard 4',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) 2)))",
-                        'triggers': ['domain'],
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
+                        'triggers': ['discard'],
                     },
                     {
                         'name': 'Cell Bundle 3',
                         'theme': 'Wildcard 5',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) 2)))",
-                        'triggers': ['marble'],
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
+                        'triggers': ['torch'],
+                    },
+                    {
+                        'name': 'Cell Bundle 4',
+                        'theme': 'Wildcard 6',
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
+                        'triggers': ['preach'],
+                        
+                    },
+                    {
+                        'name': 'Cell Bundle 5',
+                        'theme': 'Wildcard 7',
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
+                        'triggers': ['weasel'],
                     },
                     {
                         'name': 'Cell Drain 1',
-                        'theme': 'Wildcard 6',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
-                        'triggers': ['league'],
+                        'theme': 'Wildcard 8',
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
+                        'triggers': ['static'],
                     },
                     {
                         'name': 'Cell Drain 2',
-                        'theme': 'Wildcard 7',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
-                        'triggers': ['partial'],
+                        'theme': 'Wildcard 9',
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
+                        'triggers': ['handle'],
                     },
                     {
                         'name': 'Cell Drain 3',
-                        'theme': 'Wildcard 8',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
-                        'triggers': ['endure'],
-                    },
-                    {
-                        'name': 'Cell Drain 4',
-                        'theme': 'Wildcard 9',
-                        'command': "(set! (-> *game-info* fuel)(max -10.0 (- (-> *game-info* fuel) 4)))",
-                        'triggers': ['response'],
+                        'theme': 'Wildcard 10',
+                        'command': f"(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
+                        'triggers': ['proper'],
                     },
                 ]
         self.effects_found = {}
+        self.max_matches = int(os.getenv('MAX_MATCHES', 0))
         self.count_sequence = 1
-        self.target_count = int(os.getenv('TARGET_COUNT'))  # Set target number to reward a power cell
-        self.user_cooldown_limit = int(os.getenv('USER_COOLDOWN'))  # Number of unique users needed for count sequence
-        self.max_count = int(os.getenv('MAX_COUNT'))
+        self.message_barrier = 1
+        self.target_count = int(os.getenv('COUNT_TARGET', 20))
+        self.user_cooldown_limit = int(os.getenv('USER_COUNT_COOLDOWN', 3))
+        self.count_reward = int(os.getenv('COUNT_REWARD', 2))
+        self.max_count_reward = int(os.getenv('MAX_COUNT_REWARD', 5))
         self.count_count = 0
-        self.recent_users = []  # Track last four users who counted
+        self.recent_users = []
+        self.blacklist = os.getenv("USER_BLACKLIST", "").lower().split(",")
         self.goalc_process = None
         self.gk_process = None
         self.clientSocket = None
-        self.active = False  # Track whether the word processing is active
+        self.active = False
 
         # Register the cleanup function to be called at exit
         atexit.register(self.cleanup)
+
+        # Load progress from file
+        self.load_progress()
+
+    def load_progress(self):
+        """Load progress from the progress.env file."""
+        try:
+            if os.path.exists("progress.env"):
+                with open("progress.json", "r") as file:
+                    data = json.load(file)
+                    self.effects_found = data.get("effects_found", {})
+                    self.count_count = data.get("count_count", 0)
+                print("Progress loaded successfully.")
+            else:
+                print("No progress file found. Starting fresh.")
+        except Exception as e:
+            print(f"Error loading progress: {e}")
+
+    def save_progress(self):
+        """Save progress to the progress.json file."""
+        try:
+            data = {
+                "effects_found": self.effects_found,
+                "count_count": self.count_count,
+            }
+            with open("progress.json", "w") as file:
+                json.dump(data, file)
+            print("Progress saved successfully.")
+        except Exception as e:
+            print(f"Error saving progress: {e}")
 
     def cleanup(self):
         if self.clientSocket:
@@ -443,12 +498,12 @@ class TwitchBot(commands.Bot):
         # Check for start and stop commands
         if chat_message == "!startgame" and message.author.name.lower() in mods:
             self.active = True
-            await self.send_message(channel, "Word processing started!")
+            await self.send_message(channel, "🟢 Word processing started!")
             speak("Word processing started!")
             return
         elif chat_message == "!stopgame" and message.author.name.lower() in mods:
             self.active = False
-            await self.send_message(channel, "Word processing stopped!")
+            await self.send_message(channel, "🛑 Word processing stopped!")
             return
 
         # Process custom command for showing found words for an effect
@@ -457,36 +512,41 @@ class TwitchBot(commands.Bot):
             return
 
         # Only process messages if active
-        if self.active:
+        if self.active and message.author.name not in self.blacklist:
             user = message.author.name
             await self.handle_chat_message(chat_message, user)
             
     async def check_count_sequence(self, chat_message, user):
         """Check if chat is counting correctly in sequence and reward if target reached."""
-        if not self.active or self.count_count >= self.max_count:
-            return  # Exit if word processing has not started
+        #user = random.choice(self.effects[2]['triggers'])
+        if not self.active or self.count_count >= self.max_count_reward or user == channel:
+            return
 
         try:
             # Attempt to convert the message to an integer
             number = int(chat_message)
+            print(user)
+            #if number == 1 and self.count_sequence == 1:
+            #    await self.send_message(channel, "🔥 Sequence started.")
             
             # Check if the number matches the expected count
             if number == self.count_sequence:
                 if user in self.recent_users:
                     # If the user is among the last four users, don't allow counting
-                    if self.count_sequence > 2:
-                        await self.send_message(channel, "Sequence broken.")
+                    if self.count_sequence > self.message_barrier:
+                        await self.send_message(channel, f"❌ Sequence broken due to repeat user ({user}).")
                     self.count_sequence = 1
                     self.recent_users = []
                     return
 
                 if number == self.target_count:
                     # Reward a power cell if the target count is reached
-                    await self.send_message(channel, f"🎉 Chat reached {self.target_count} in sequence! +1 Power Cell! 🎉")
-                    self.send_form(f"(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) {cell_inc})))")
+                    polarity = "" if self.count_reward < 0 else "+"
+                    response = "Power Cell!" if abs(self.count_reward) == 1 else "Power Cells!"
+                    await self.send_message(channel, f"🎉 Chat reached {self.target_count} in sequence! {polarity}{self.count_reward} {response} 🎉")
+                    self.send_form(f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {self.count_reward})))")
                     self.count_count += 1
-                    if tts:
-                        speak(f"Chat reached {self.target_count} in sequence!")
+                    speak(f"Chat reached {self.target_count} in sequence!")
 
                     # Reset sequence and recent users list
                     self.count_sequence = 1
@@ -496,32 +556,33 @@ class TwitchBot(commands.Bot):
                     self.count_sequence += 1
                     self.recent_users.append(user)
                     
-                    # Maintain only the last four users in the list
                     if len(self.recent_users) > self.user_cooldown_limit:
                         self.recent_users.pop(0)
 
             else:
-                # If number is incorrect, reset the sequence (only announce if past 1)
-                if self.count_sequence > 2:
-                    await self.send_message(channel, "Sequence broken.")
+                if self.count_sequence > self.message_barrier:
+                    await self.send_message(channel, "❌ Sequence broken due to nonsequential number.")
                 self.count_sequence = 1
                 self.recent_users = []
+            print(self.recent_users)
 
         except ValueError:
-            # If the message isn't a number, reset the sequence (only announce if past 1)
-            if self.count_sequence > 2:
-                await self.send_message(channel, "Sequence broken.")
+            if self.count_sequence > self.message_barrier:
+                await self.send_message(channel, "❌ Sequence broken due to non-number.")
             self.count_sequence = 1
             self.recent_users = []
 
     # Handle chat messages and word processing
     async def handle_chat_message(self, chat_message, user):
+        matches = 0
         for effect in self.effects:
             # Initialize the effect in self.effects_found if not already done
             if effect['name'] not in self.effects_found:
                 self.effects_found[effect['name']] = {'words': [], 'completed': False}
 
             for trigger in effect['triggers']:
+                if matches >= self.max_matches and self.max_matches > 0:
+                    break
                 # Determine if the trigger is a list (multiple alternatives) or a single word
                 if isinstance(trigger, list):
                     # For a list, check if any alternative word exists in the message
@@ -530,40 +591,41 @@ class TwitchBot(commands.Bot):
                 else:
                     # For a single word trigger
                     match = re.search(r'\b' + re.escape(trigger) + r'\b', chat_message)
-                    main_word = trigger  # Single word is the main word itself
+                    main_word = trigger
 
                 # If there is a match and the word hasn't been used already
                 if match and main_word not in self.effects_found[effect['name']]['words']:
-                    # Trigger the effect
                     await self.trigger_effect(effect, main_word, user)
 
-                    # Add the main word to the found words list
                     self.effects_found[effect['name']]['words'].append(main_word)
+                    self.save_progress()
 
                     remaining_words = len(effect['triggers']) - len(self.effects_found[effect['name']]['words'])
-                    await self.send_message(channel, f"{user} found {effect['name']} with '{main_word}' ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})!")
+                    await self.send_message(channel, f"🎯 {user} found {effect['name']} with '{main_word}' ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})!")
 
-                    if tts:
-                        speak(f"{user} found {effect['name']} with '{main_word}'")
-
-                    break  # Stop processing after finding one word to prevent multiple matches in one message
+                    speak(f"{user} found {effect['name']} with '{main_word}'")
+                    
+                    if not tts:
+                        await asyncio.sleep(2.5)
+                        
+                    matches += 1
 
             # Check if all words for this effect have been found, and give the reward if not already completed
             if len(self.effects_found[effect['name']]['words']) == len(effect['triggers']) and not self.effects_found[effect['name']]['completed']:
-                await self.send_message(channel, f"All words found for {effect['name']} ({effect['theme']})!")
-                self.send_form(f"(set! (-> *game-info* fuel)(max -10.0 (+ (-> *game-info* fuel) {cell_inc})))")
+                await self.send_message(channel, f"🏆 All words found for {effect['name']} ({effect['theme']})!")
+                self.send_form(f"(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_inc})))")
 
-                if tts:
-                    speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
+                speak(f"All words found for {effect['name']} -- ({effect['theme']})!")
 
-                # Mark the effect as completed
                 self.effects_found[effect['name']]['completed'] = True
+                self.save_progress()
 
-    # Handle chat commands, including requests for showing found words for an effect
+
+    # Handle chat commands, including requests for showing found words for an effect and listing all effects
     async def handle_custom_commands(self, command, user):
         command = command.strip().lower()
 
-        # Check if the command corresponds to any effect
+        # Check if the command corresponds to a specific effect
         for effect in self.effects:
             effect_command = "!" + re.sub(r'[^a-zA-Z0-9]', '', effect['name']).lower()  # Make a clean command (e.g., "!speedboost")
 
@@ -574,14 +636,34 @@ class TwitchBot(commands.Bot):
 
                 # If no words have been found, skip showing the message
                 if not found_words:
-                    return  # Exit if no words have been found yet
+                    return
 
-                # Show all found words even if the theme is completed
+                # Show all found words
                 found_words_str = ", ".join(found_words)
                 total_words = len(effect['triggers'])
-                completed_status = f" ({effect['theme']})" if effect_data['completed'] else f" ({len(self.effects_found[effect['name']]['words'])}/{len(effect['triggers'])})"
-                await self.send_message(channel, f"{effect['name']}: {found_words_str}{completed_status}")
-                return  # Exit after handling the correct command
+                completed_status = f" ({effect['theme']})" if effect_data['completed'] else f" ({len(effect_data['words'])}/{len(effect['triggers'])})"
+                await self.send_message(channel, f"📝 {effect['name']}: {found_words_str}{completed_status}")
+                return
+
+        # Handle !effects command to show only unfinished effects
+        if command == "!effects":
+            not_completed_effects = []
+
+            # Only include effects that are not completed and have at least one word found
+            for effect_name, effect_data in self.effects_found.items():
+                if not effect_data['completed'] and effect_data['words']:
+                    found_count = len(effect_data['words'])
+                    total_count = len(next(effect for effect in self.effects if effect['name'] == effect_name)['triggers'])
+                    not_completed_effects.append(f"{effect_name} ({found_count}/{total_count})")
+
+            # Respond appropriately
+            if not self.effects_found:
+                await self.send_message(channel, "❎ No effects found yet.")
+            elif not not_completed_effects:
+                await self.send_message(channel, "✅ All found effects are completed!")
+            else:
+                not_completed_list = ", ".join(not_completed_effects)
+                await self.send_message(channel, f"🕒 Not Completed: {not_completed_list}")
 
     async def trigger_effect(self, effect, word, user):
         if 'toggle' in effect and effect['toggle']:
@@ -604,13 +686,11 @@ class TwitchBot(commands.Bot):
     # Launch goalc.exe and gk.exe asynchronously, and monitor their statuses
     async def launch_game(self):
         try:
-            # Start gk.exe first
             self.gk_process = subprocess.Popen(['gk.exe', '-v', '--', '-boot', '-fakeiso', '-debug'], cwd=os.getcwd())
             
             # Wait for a moment to ensure gk.exe initializes properly
             await asyncio.sleep(2)
             
-            # Start goalc.exe
             self.goalc_process = subprocess.Popen(['goalc.exe'], cwd=os.getcwd())
             
             # Optionally, wait for the goalc process to initialize
@@ -628,14 +708,16 @@ class TwitchBot(commands.Bot):
             self.send_form('(mi)')
             self.send_form("(set! *debug-segment* #f)")
             self.send_form("(set! *cheat-mode* #f)")
+            self.send_form("(set! (-> *pc-settings* speedrunner-mode?) #f)")
 
             # Start an asyncio task to monitor the subprocesses
             asyncio.create_task(self.monitor_subprocesses())
+            await self.send_message(channel, "🤖 Bot connected! plink")
 
         except Exception as e:
             print(f"Error launching gk or goalc: {e}")
             self.cleanup()
-            sys.exit(1)  # Exit with error code
+            sys.exit(1)
 
     async def monitor_subprocesses(self):
         """Monitor subprocesses asynchronously and terminate the program if any subprocess closes."""
@@ -655,7 +737,7 @@ class TwitchBot(commands.Bot):
 
         # If we break out of the loop (i.e., one of the subprocesses terminated), call cleanup and exit
         self.cleanup()
-        sys.exit(1)  # Exit with error code
+        sys.exit(1)
 
     def send_form(self, form):
         header = struct.pack('<II', len(form), 10)
