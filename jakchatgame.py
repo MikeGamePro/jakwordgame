@@ -178,9 +178,9 @@ class TwitchBot(commands.Bot):
                     },
                     {
                         'name': 'Slip Resistance',
-                        'theme': 'Better Late Than Never',
+                        'theme': 'Types of Sauces',
                         'command': f"(set! (-> *pat-mode-info* 1 wall-angle) (max 0.0 (- (-> *pat-mode-info* 1 wall-angle) {slip_res_inc})))(set! (-> *pat-mode-info* 2 wall-angle) (max 0.0 (- (-> *pat-mode-info* 2 wall-angle) {slip_res_inc / 2.44})))",
-                        'triggers': ['better', 'late', 'than', 'never']
+                        'triggers': ['hot', 'cocktail', 'tomato', 'chocolate']
                     },
                     {
                         'name': 'I-Frames Increase',
@@ -218,7 +218,7 @@ class TwitchBot(commands.Bot):
                         'name': 'Blue Eco Range Increase',
                         'theme': 'Things You Take',
                         'command': f"(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (+ (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (+ (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-                        'triggers': ['break', 'chance', 'look', 'bite', 'seat', 'stand', 'breath', 'hike', 'risk', 'nap', 'pill', 'hint'],
+                        'triggers': ['break', 'chance', 'look', 'bite', 'seat', 'stand', 'breath', 'hike', 'risk', 'nap', 'bath', 'hint'],
                     },
                     {
                         'name': 'Blue Eco Range Decrease',
