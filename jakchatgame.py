@@ -31,6 +31,7 @@ oauth_token = os.getenv('TWITCH_OAUTH_TOKEN')
 channel = os.getenv('TWITCH_USERNAME')
 tts = os.getenv('TTS', 't').lower() != "f"
 min_cell_count = float(os.getenv('MIN_CELL_COUNT', -10))
+min_orb_count = float(os.getenv('MIN_ORB_COUNT', -90))
 cell_inc = int(os.getenv('CELL_INC', 1))
 cell_bundle = int(os.getenv('CELL_BUNDLE', 2))
 cell_drain = int(os.getenv('CELL_DRAIN', 4))
@@ -45,6 +46,7 @@ boosted_inc = float(os.getenv('BOOSTED_INC', 8500.0))
 iframes_inc = float(os.getenv('IFRAMES_INC', 1.0))
 spin_inc = float(os.getenv('SPIN_INC', 1.0))
 grav_mul = float(os.getenv('GRAVITY_MUL', 1.2))
+#increment_mode = os.getenv('INCREMENT_MODE', 'stack').lower()
 
 mods = [channel, "mikegamepro"]
 
@@ -341,6 +343,7 @@ class TwitchBot(commands.Bot):
             '{random_boom}': random.choice(boom_list),
             '{random_point}': point_list[random.choice(range(0,52))],
             '{min_cell_count}': str(min_cell_count),
+            '{min_orb_count}': str(min_orb_count),
             '{cell_inc}': str(cell_inc),
             '{cell_bundle}': str(cell_bundle),
             '{cell_drain}': str(cell_drain),
@@ -369,6 +372,20 @@ class TwitchBot(commands.Bot):
                 effect['toggle'] = True
 
         self.send_form(command_to_send)
+
+    # def calculate_increment(self, base_value, effect_name, round_to_whole=False):
+    #     if increment_mode == 'cap':
+    #         total_triggers = len(next(effect for effect in self.effects if effect['name'] == effect_name)['triggers'])
+    #         increment = base_value / total_triggers
+    #         if round_to_whole:
+    #             increment = round(increment)
+    #         # Ensure the total increment does not exceed the base value
+    #         found_triggers = len(self.effects_found[effect_name]['words'])
+    #         total_increment = increment * (found_triggers + 1)
+    #         if total_increment > base_value:
+    #             increment = base_value - (increment * found_triggers)
+    #         return increment
+    #     return base_value
 
     async def send_message(self, channel, message):
         """Send a message to the channel."""

@@ -20,13 +20,13 @@
     {
         "name": "Orb Increase",
         "theme": "Pirate",
-        "command": "(set! (-> *game-info* money)(max -90.0 (+ (-> *game-info* money) {orb_inc})))",
+        "command": "(set! (-> *game-info* money)(max {min_orb_count} (+ (-> *game-info* money) {orb_inc})))",
         "triggers": ["plank", "peg", "cannon", "parrot", "rum", "captain", "treasure", "hook"]
     },
     {
         "name": "Orb Decrease",
         "theme": "Periods of Time",
-        "command": "(set! (-> *game-info* money)(max -90.0 (- (-> *game-info* money) {orb_inc})))",
+        "command": "(set! (-> *game-info* money)(max {min_orb_count} (- (-> *game-info* money) {orb_inc})))",
         "triggers": ["century", "fortnight", "year", "day", "month", "second", "eon", "hour"]
     },
     {
@@ -43,10 +43,10 @@
     },
     {
         "name": "No Punch or Spin",
-        "theme": "Things That Come Back",
+        "theme": "Sports Teams",
         "command": "(set! (-> *TARGET-bank* attack-timeout)(seconds 999999))",
         "command2": "(set! (-> *TARGET-bank* attack-timeout)(seconds 0.3))",
-        "triggers": ["echo", "reflection", "boomerang", "karma"],
+        "triggers": [["nugget", "nuggets"], ["brave", "braves"], ["cowboy", "cowboys"], "avalanche"],
         "toggle": false
     },
     {
@@ -95,9 +95,9 @@
     },
     {
         "name": "Slip Resistance",
-        "theme": "Types of Sauces",
+        "theme": "Full of Holes",
         "command": "(set! (-> *pat-mode-info* 1 wall-angle) (max 0.0 (- (-> *pat-mode-info* 1 wall-angle) {slip_res_inc})))(set! (-> *pat-mode-info* 2 wall-angle) (max 0.0 (- (-> *pat-mode-info* 2 wall-angle) {slip_res_inc / 2.44})))",
-        "triggers": ["hot", "cocktail", "tomato", "chocolate"]
+        "triggers": ["cheese", "net", "story", "golf"]
     },
     {
         "name": "I-Frames Increase",
@@ -113,10 +113,10 @@
     },
     {
         "name": "Mirror World",
-        "theme": "Found in a Construction Site",
+        "theme": "Types of Sauce",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats mirror)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats mirror)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats mirror))",
-        "triggers": ["crane", "cement", "hammer", "beam"],
+        "triggers": ["hot", "cocktail", "tomato", "garlic"],
         "toggle": false
     },
     {
@@ -271,68 +271,62 @@
     },
     {
         "name": "Rapid Fire",
-        "theme": "Wildcard 1",
+        "theme": "Top 1 Things to Do in California",
         "command": "(set! (-> *TARGET-bank* yellow-projectile-speed) (meters 100))(set! (-> *TARGET-bank* yellow-attack-timeout) (seconds 0))",
-        "triggers": ["stain"]
+        "triggers": ["leave"]
     },
     {
         "name": "Back 2 Geyser",
-        "theme": "Wildcard 2",
+        "theme": "Wildcard 1",
         "command": "(start 'play (get-continue-by-name *game-info* \"intro-start\"))(auto-save-command 'auto-save 0 0 *default-pool*)",
         "triggers": ["refuse", "prevent"]
     },
     {
         "name": "Cell Bundle 1",
-        "theme": "Wildcard 3",
+        "theme": "Wildcard 2",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
         "triggers": ["position"]
     },
     {
         "name": "Cell Bundle 2",
-        "theme": "Wildcard 4",
+        "theme": "Wildcard 3",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
         "triggers": ["discard"]
     },
     {
         "name": "Cell Bundle 3",
-        "theme": "Wildcard 5",
+        "theme": "Wildcard 4",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
         "triggers": ["torch"]
     },
     {
         "name": "Cell Bundle 4",
-        "theme": "Wildcard 6",
+        "theme": "Wildcard 5",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
         "triggers": ["preach"]
     },
     {
         "name": "Cell Bundle 5",
-        "theme": "Wildcard 7",
+        "theme": "Wildcard 6",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
         "triggers": ["weasel"]
     },
     {
         "name": "Cell Drain 1",
-        "theme": "Wildcard 8",
+        "theme": "Wildcard 7",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
         "triggers": ["static"]
     },
     {
         "name": "Cell Drain 2",
-        "theme": "Wildcard 9",
+        "theme": "Wildcard 8",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
         "triggers": ["handle"]
     },
     {
         "name": "Cell Drain 3",
-        "theme": "Wildcard 10",
+        "theme": "McDonald's Menu Items",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
-        "triggers": ["proper"]
-    },
-    {
-        "name": "Test",
-        "theme": "None",
-        "command": "",
-        "triggers": ["qwerty", "uiop", "asdfg", "hjkl"]
+        "triggers": ["whopper"]
     }
 ]
