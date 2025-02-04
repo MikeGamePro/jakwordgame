@@ -152,7 +152,7 @@ class TwitchBot(commands.Bot):
     async def event_message(self, message):
         # Ignore messages from the bot itself, unless they are commands
         if (message.author.name.lower() == channel.lower() and not chat_test) and not message.content.startswith('!'):
-            return  # Ignore other messages from the bot itself
+            return
 
         chat_message = message.content.lower().strip()
         print(f"Received message: {chat_message}")
@@ -199,7 +199,7 @@ class TwitchBot(commands.Bot):
             # Check if the number matches the expected count
             if number == self.count_sequence:
                 if user in self.recent_users:
-                    # If the user is among the last four users, don't allow counting
+                    # If recent user, don't allow counting
                     if self.count_sequence > self.message_barrier:
                         await self.send_message(channel, f"❌ Sequence broken due to repeat user ({user}).")
                     self.count_sequence = 1
