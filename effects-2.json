@@ -1,33 +1,135 @@
 [
     {
         "name": "Death",
-        "theme": "TODO",
+        "theme": "Things You Lose",
         "command": "(when (not (movie?))(target-attack-up *target* 'attack '{random_death}))",
-        "triggers": [["bit", "bits"], "chat", "stream", "subscribe", "buffer", "raid", "follow", "amazon", "live", "channel"]
+        "triggers": [["keys", "key"], "motivation", "track", "balance", "control", "patience", "focus", "interest", "game", "hope", "mind"]
     },
     {
         "name": "Cell Increase",
-        "theme": "TODO",
+        "theme": "Types of Houses",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_inc})))",
-        "triggers": ["weigh", "sleigh", "champagne", "design", "gnat", "gnaw", "gnome", "sign", "align", "reign", "light", "though", "sigh", "benign", "foreign", "campaign", "resign"]
+        "triggers": ["out", "farm", "beach", "boat", "town", "pent", "ware", "power", "club", "dog", "green", "fire", "light"]
     },
     {
         "name": "Cell Decrease",
         "theme": "TODO Landmine Words",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_inc})))",
-        "triggers": ["little", "sting", "sketch", "debate", "luggage", "envelope", "magnet", "circus", "calculator", "quantum", "helicopter", "paradox", "ink", "bell", "glove", "hypothesis", "chair", "infinity", "random", "rhombus", "science", "flute", "thank", "radio", "scrub", "giraffe", "trampoline", "canyon", "combat", "statue", "monopoly", "dinosaur", "ruler", "helmet", "omega", "library", "spectrum", "mushroom", "clown", "universe", "matrix", "chemistry", "equation", "compass", "fog", "recipe", "ingredient", "alarm", "cake", "angry", "glacier", "active", "velvet", "potion", "podium", "landmine", "hello", "spoon", "puddle", "violin", "portrait", "quick", "lantern", "opposite", "mad", "zero", "last", "third", "tomb", "speed", "industrial", "outrage", "what", "prawn", "agriculture", "flock", "mango", "pigeon", "project", "crack", "first", "happy", "yellow", "confused", "bronze", "work", "teacher", "manslaughter", "mercury", "ray", "gamer", "general", "scatter", "visit", "fresh", "phosphate", "electric", "bound", "weiner", "suffer", "supercalifragilisticexpialidocious"]
+        "triggers": [
+            "paradise",
+            "Banana",
+            "promote",
+            "dispatch",
+            "Mountain",
+            "inventory",
+            "useless",
+            "Desert",
+            "library",
+            "Cloud",
+            "harmony",
+            "bunch",
+            "birthday",
+            "Breeze",
+            "Volcano",
+            "something",
+            "pulse",
+            "Lake",
+            "melody",
+            "doubt",
+            "parody",
+            "echo",
+            "twist",
+            "printer",
+            "easy",
+            "coast",
+            "Lavender",
+            "Maple",
+            "linger",
+            "pad",
+            "favorite",
+            "magic",
+            "trash",
+            "sonic",
+            "aware",
+            "Eclipse",
+            "reveal",
+            "interrogation",
+            "important",
+            "hear",
+            "conduct",
+            "Cosmos",
+            "trap",
+            "suspicious",
+            "Starfish",
+            "source",
+            "happen",
+            "logic",
+            "Whale",
+            "wrong",
+            "thought",
+            "situation",
+            "redundant",
+            "cheating",
+            "excellent",
+            "transform",
+            "because",
+            "sweet",
+            "appointment",
+            "reminder",
+            "rock",
+            "without",
+            "dream",
+            "slim",
+            "detect",
+            "hazard",
+            "shame",
+            "wig",
+            "Hawk",
+            "tuah",
+            "define",
+            "gesture",
+            "rewind",
+            "twice",
+            "lifetime",
+            "rift",
+            "council",
+            "accusation",
+            "cascade",
+            "Turtle",
+            "Tortoise",
+            "speck",
+            "commit",
+            "whimsy",
+            "Moth",
+            "category",
+            "momentum",
+            "discord",
+            "saga",
+            "breeze",
+            "Reach",
+            "desire",
+            "melancholy",
+            "innovation",
+            "legend",
+            "pinnacle",
+            "justice",
+            "Snail",
+            "Slug",
+            "Pebble"
+          ]
+          
     },
     {
         "name": "Orb Increase",
-        "theme": "TODO",
+        "theme": "Better Late Than Never",
         "command": "(set! (-> *game-info* money)(max {min_orb_count} (+ (-> *game-info* money) {orb_inc})))",
-        "triggers": ["plank", "peg", "cannon", "parrot", "rum", "captain", "treasure", "hook"]
+        "triggers": ["better", "late", "than", "never"]
     },
     {
         "name": "Orb Decrease",
-        "theme": "TODO",
+        "theme": "Types of Guns",
         "command": "(set! (-> *game-info* money)(max {min_orb_count} (- (-> *game-info* money) {orb_inc})))",
-        "triggers": ["century", "fortnight", "year", "day", "month", "second", "eon", "hour"]
+        "triggers": ["machine", "nail", "stun", "hand", "shot", "glue", "flare", "harpoon", "rail"]
     },
     {
         "name": "Jump Boost",
@@ -37,9 +139,9 @@
     },
     {
         "name": "Speed Boost",
-        "theme": "TODO",
+        "theme": "Things You Pull",
         "command": "(set! (-> *walk-mods* target-speed) (+ (-> *walk-mods* target-speed) (meters {speed_inc})))(set! (-> *double-jump-mods* target-speed) (+ (-> *double-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *jump-mods* target-speed) (+ (-> *jump-mods* target-speed) (meters {speed_inc})))(set! (-> *jump-attack-mods* target-speed) (+ (-> *jump-attack-mods* target-speed) (meters {speed_inc})))(set! (-> *attack-mods* target-speed) (+ (-> *attack-mods* target-speed) (meters {speed_inc})))(set! (-> *forward-high-jump-mods* target-speed) (+ (-> *forward-high-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *flip-jump-mods* target-speed) (+ (-> *flip-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *high-jump-mods* target-speed) (+ (-> *high-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *smack-jump-mods* target-speed) (+ (-> *smack-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *duck-attack-mods* target-speed) (+ (-> *duck-attack-mods* target-speed) (meters {speed_inc})))(set! (-> *flop-mods* target-speed) (+ (-> *flop-mods* target-speed) (meters {speed_inc})))",
-        "triggers": ["line", "shape", "texture", "form", "space", "value", ["color", "colour"]]
+        "triggers": ["rope", "lever", "wagon", "muscle", "trick", "plug", "curtain"]
     },
     {
         "name": "No Punch or Spin",
@@ -51,15 +153,15 @@
     },
     {
         "name": "Blue Eco",
-        "theme": "TODO",
+        "theme": "Things You Pop",
         "command": "(send-event *target* 'get-pickup (pickup-type eco-blue) 5.0)",
-        "triggers": ["dust", "inferno", "mirage", "nuke", "train", "office", "cache", "overpass", "cobblestone", "ancient", "vertigo"]
+        "triggers": ["balloon", "bubble", "kernel", "tire", "pimple", "confetti", "firecracker", "cork"]
     },
     {
         "name": "Red Eco",
-        "theme": "TODO",
+        "theme": "Cleaning Methods",
         "command": "(send-event *target* 'get-pickup (pickup-type eco-red) 5.0)",
-        "triggers": ["wash", "miss", "ten", "pen", "main", "ill", "ark", "color", "mass", "ore", "alas"]
+        "triggers": [["sweep", "sweeping"], ["mop", "mopping"], ["dust", "dusting"], ["wipe", "wiping"], ["scrub", "scrubbing"], ["polish", "polishing"], ["disinfect", "disinfecting"], ["sterilize", "sterilise", "sterilization", "sterilisation", "sterilizing", "sterilising"]]
     },
     {
         "name": "Yellow Eco",
@@ -69,15 +171,15 @@
     },
     {
         "name": "Trip",
-        "theme": "TODO",
+        "theme": "Synonyms of \"Big\"",
         "command": "(send-event *target* 'loading)",
-        "triggers": ["pan", "snow", "lion", "tangled", "frozen", "lady", "beauty", "mermaid", "fantasia", "stitch", "jungle"]
+        "triggers": ["large", ["sizable", "sizeable"], "substantial", "huge", "gigantic", "massive", "tremendous", "colossal", "enormous"]
     },
     {
         "name": "BOOM",
-        "theme": "TODO",
+        "theme": "Photo Aspects",
         "command": "(sound-play \"{random_boom}\")",
-        "triggers": ["nest", "ship", ["mine", "mines"], "haven", "volcano", "oasis", "port", "course", "temple", ["sewers", "sewer"], "factory", "palace"]
+        "triggers": ["composition", "lighting", "contrast", "exposure", "focus", "angle", ["framing", "frame"], "saturation", "sharpness"]
     },
     {
         "name": "Invulnerability",
@@ -101,9 +203,9 @@
     },
     {
         "name": "I-Frames Increase",
-        "theme": "TODO",
+        "theme": "Things You Strike",
         "command": "(set! (-> *TARGET-bank* hit-invulnerable-timeout) (+ (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {iframes_inc})))",
-        "triggers": ["base", "field", "bunt", "pitch", "mound", "strike"]
+        "triggers": ["match", "pose", "deal", "gold", "chord"]
     },
     {
         "name": "I-Frames Decrease",
@@ -113,10 +215,10 @@
     },
     {
         "name": "Mirror World",
-        "theme": "Things You Can Do To Time",
+        "theme": "Things You Do to Time",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats mirror)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats mirror)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats mirror))",
-        "triggers": ["kill", "pass", "take", "save"],
+        "triggers": ["kill", "pass", "take", "save", "spend", "waste"],
         "toggle": false
     },
     {
@@ -127,19 +229,19 @@
     },
     {
         "name": "Random Checkpoint",
-        "theme": "TODO",
+        "theme": "Synonyms of \"Throw\"",
         "command": "(start 'play (get-continue-by-name *game-info* \"{random_point}\"))(auto-save-command 'auto-save 0 0 *default-pool*)",
-        "triggers": ["feud", "jeopardy", "fortune", "millionaire", "price", "deal", "password", "match"]
+        "triggers": ["chuck", "toss", "fling", "hurl", "pitch", "cast", "heave", "lob"]
     },
     {
         "name": "Blue Eco Range Increase",
-        "theme": "TODO",
+        "theme": "After \"Front\"",
         "command": "(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (+ (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (+ (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-        "triggers": ["break", "chance", "look", "bite", "seat", "stand", "breath", "hike", "risk", "nap", "bath", "hint"]
+        "triggers": ["door", "man", "desk", "yard", "page", "row", "line", "seat", "runner", "office", "porch"]
     },
     {
         "name": "Blue Eco Range Decrease",
-        "theme": "Creatures That Jump",
+        "theme": "Creatures Known for Jumping",
         "command": "(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (- (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (- (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
         "triggers": [["grasshopper", "grasshoppers"], ["rabbit", "rabbits"], ["kangaroo", "kangaroos"], ["frog", "frogs"]]
     },
@@ -148,7 +250,7 @@
         "theme": "Internet Terms",
         "command": "(set! (-> *stone-surface* slip-factor) 0.8)(set! (-> *stone-surface* transv-max) 1.3)(set! (-> *stone-surface* turnv) 0.56)(set! (-> *stone-surface* nonlin-fric-dist) 3600875.0)(set! (-> *stone-surface* fric) 23756.8)(set! (-> *grass-surface* slip-factor) 0.8)(set! (-> *grass-surface* transv-max) 1.3)(set! (-> *grass-surface* turnv) 0.56)(set! (-> *grass-surface* nonlin-fric-dist) 3600875.0)(set! (-> *grass-surface* fric) 26726.4)(set! (-> *ice-surface* slip-factor) 0.33)(set! (-> *ice-surface* nonlin-fric-dist) 7201750.0)(set! (-> *ice-surface* fric) 13363.4)",
         "command2": "(set! (-> *stone-surface* slip-factor) 1.0)(set! (-> *stone-surface* transv-max) 1.0)(set! (-> *stone-surface* turnv) 1.0)(set! (-> *stone-surface* nonlin-fric-dist) 5120.0)(set! (-> *stone-surface* fric) 153600.0)(set! (-> *grass-surface* slip-factor) 1.0)(set! (-> *grass-surface* transv-max) 1.0)(set! (-> *grass-surface* turnv) 1.0)(set! (-> *grass-surface* nonlin-fric-dist) 4096.0)(set! (-> *grass-surface* fric) 122880.0)(set! (-> *ice-surface* slip-factor) 0.7)(set! (-> *ice-surface* nonlin-fric-dist) 4091904.0)(set! (-> *ice-surface* fric) 23756.8)",
-        "triggers": ["web", "page", "packet", "troll", "link", "browse", "cookie", "cache"],
+        "triggers": ["web", "proxy", "packet", "troll", "link", "browse", "cookie", "cache"],
         "toggle": false
     },
     {
@@ -209,7 +311,7 @@
     },
     {
         "name": "Gravity Increase",
-        "theme": "Companies",
+        "theme": "Corporations",
         "command": "(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {grav_mul}))",
         "triggers": ["shell", "amazon", "apple", "intel", "oracle"]
     },
@@ -239,7 +341,7 @@
         "name": "Boosted Increase",
         "theme": "Things That Run",
         "command": "(set! (-> *edge-surface* fric) (- (-> *edge-surface* fric) {boosted_inc}))",
-        "triggers": [["feet", "foot"], "water", "car", "nose", ["fridge", "refrigerator"]]
+        "triggers": [["feet", "foot"], "water", "engine", "nose", ["fridge", "refrigerator"]]
     },
     {
         "name": "Spin Radius Increase",

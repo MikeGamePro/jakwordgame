@@ -97,7 +97,7 @@
         "name": "Slip Resistance",
         "theme": "Full of Holes",
         "command": "(set! (-> *pat-mode-info* 1 wall-angle) (max 0.0 (- (-> *pat-mode-info* 1 wall-angle) {slip_res_inc})))(set! (-> *pat-mode-info* 2 wall-angle) (max 0.0 (- (-> *pat-mode-info* 2 wall-angle) {slip_res_inc / 2.44})))",
-        "triggers": ["cheese", "net", "story", "golf"]
+        "triggers": ["sponge", "net", "story", "golf"]
     },
     {
         "name": "I-Frames Increase",
@@ -173,9 +173,9 @@
     },
     {
         "name": "Rolljump Decrease",
-        "theme": "Common Pet Names",
+        "theme": "Famous Doctors",
         "command": "(set! (-> *TARGET-bank* wheel-flip-dist) (- (-> *TARGET-bank* wheel-flip-dist) (meters {rolljump_inc})))",
-        "triggers": ["buddy", "lucky", "mittens", "fluffy", "biscuit"]
+        "triggers": ["who", "strange", "pepper", "house"]
     },
     {
         "name": "No Textures",
@@ -203,9 +203,9 @@
     },
     {
         "name": "Boosted Decrease",
-        "theme": "Methods of Unlocking",
+        "theme": "Things With Keys",
         "command": "(set! (-> *edge-surface* fric) (+ {boosted_inc} (-> *edge-surface* fric)))",
-        "triggers": ["key", "code", "scan"]
+        "triggers": ["map", "lock", "piano"]
     },
     {
         "name": "Gravity Increase",
