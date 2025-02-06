@@ -68,7 +68,7 @@ point_list = ["training-start","game-start","village1-hut","village1-warp","beac
 death_list = ['melt', 'endlessfall', 'drown-death']
 boom_list = ['dcrate-break', 'explosion', 'explosion-2', 'zoomer-explode', 'blob-explode']
 
-chat_test = False
+allow_channel = True
 
 # Load effects from JSON file
 def load_effects():
@@ -153,7 +153,7 @@ class TwitchBot(commands.Bot):
     # Handle incoming messages in the chat
     async def event_message(self, message):
         # Ignore messages from the bot itself, unless they are commands
-        if (message.author.name.lower() == channel.lower() and not chat_test) and not message.content.startswith('!'):
+        if (message.author.name.lower() == channel.lower() and not allow_channel) and not message.content.startswith('!'):
             return
 
         chat_message = message.content.lower().strip()
@@ -188,7 +188,7 @@ class TwitchBot(commands.Bot):
         if self.simulate_users:
             user = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=8))  # Generate a random username
 
-        if not self.active or self.count_count >= self.max_count_rewards or user == channel:
+        if not self.active or self.count_count >= self.max_count_rewards:
             return
 
         try:
@@ -332,7 +332,21 @@ class TwitchBot(commands.Bot):
                 await self.send_message(channel, "✅ All found effects are completed!")
             else:
                 not_completed_list = ", ".join(not_completed_effects)
-                await self.send_message(channel, f"🕒 Not Completed: {not_completed_list}")
+                # Split the message if it exceeds Twitch character limit
+                messages = []
+                current_message = ""
+                for effect in not_completed_list.split(", "):
+                    if len(current_message) + len(effect) + 2 > 450:
+                        messages.append(current_message)
+                        current_message = effect
+                    else:
+                        if current_message:
+                            current_message += ", "
+                        current_message += effect
+                if current_message:
+                    messages.append(current_message)
+                for msg in messages:
+                    await self.send_message(channel, f"🕒 Not Completed: {msg}")
 
     async def trigger_effect(self, effect, word, user):
         command = effect['command']
