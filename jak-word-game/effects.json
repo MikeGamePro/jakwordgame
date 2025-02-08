@@ -15,7 +15,7 @@
         "name": "Cell Decrease",
         "theme": "Landmine Words",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_inc})))",
-        "triggers": ["little", "sting", "sketch", "debate", "luggage", "envelope", "magnet", "circus", "calculator", "quantum", "helicopter", "paradox", "ink", "bell", "glove", "hypothesis", "chair", "infinity", "random", "rhombus", "science", "flute", "thank", "radio", "scrub", "giraffe", "trampoline", "canyon", "combat", "statue", "monopoly", "dinosaur", "ruler", "helmet", "omega", "library", "spectrum", "mushroom", "clown", "universe", "matrix", "chemistry", "equation", "compass", "fog", "recipe", "ingredient", "alarm", "cake", "angry", "glacier", "active", "velvet", "potion", "podium", "landmine", "hello", "spoon", "puddle", "violin", "portrait", "quick", "lantern", "opposite", "mad", "zero", "last", "third", "tomb", "speed", "industrial", "outrage", "what", "prawn", "agriculture", "flock", "mango", "pigeon", "project", "crack", "first", "happy", "yellow", "confused", "bronze", "work", "teacher", "manslaughter", "mercury", "ray", "gamer", "general", "scatter", "visit", "fresh", "phosphate", "electric", "bound", "weiner", "suffer", "supercalifragilisticexpialidocious", "clueless", "aware"]
+        "triggers": [["realize", "realise"], "forever", "worst", "hawk", "welcome", "bring", "once", "dead", "little", "sting", "sketch", "debate", "luggage", "envelope", "magnet", "circus", "calculator", "quantum", "helicopter", "paradox", "ink", "bell", "glove", "hypothesis", "chair", "infinity", "random", "rhombus", "science", "flute", "thank", "radio", "scrub", "giraffe", "trampoline", "canyon", "combat", "statue", "monopoly", "dinosaur", "ruler", "helmet", "omega", "library", "spectrum", "mushroom", "clown", "universe", "matrix", "chemistry", "equation", "compass", "fog", "recipe", "ingredient", "alarm", "cake", "angry", "glacier", "active", "velvet", "potion", "podium", "landmine", "hello", "spoon", "puddle", "violin", "portrait", "quick", "lantern", "opposite", "mad", "zero", "last", "third", "tomb", "speed", "industrial", "outrage", "what", "prawn", "agriculture", "flock", "mango", "pigeon", "project", "crack", "first", "happy", "yellow", "confused", "bronze", "work", "teacher", "manslaughter", "mercury", "ray", "gamer", "general", "scatter", "visit", "fresh", "phosphate", "electric", "bound", "weiner", "suffer", "supercalifragilisticexpialidocious", "clueless", "aware"]
     },
     {
         "name": "Orb Increase",
@@ -282,49 +282,19 @@
         "triggers": ["refuse", "prevent"]
     },
     {
-        "name": "Cell Bundle 1",
+        "name": "Cell Bundle",
         "theme": "Wildcard 2",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
-        "triggers": ["position"]
-    },
-    {
-        "name": "Cell Bundle 2",
-        "theme": "Wildcard 3",
-        "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
-        "triggers": ["discard"]
-    },
-    {
-        "name": "Cell Bundle 3",
-        "theme": "Wildcard 4",
-        "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
-        "triggers": ["torch"]
-    },
-    {
-        "name": "Cell Bundle 4",
-        "theme": "Wildcard 5",
-        "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
-        "triggers": ["preach"]
-    },
-    {
-        "name": "Cell Bundle 5",
-        "theme": "Wildcard 6",
-        "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_bundle})))",
-        "triggers": ["weasel"]
+        "triggers": ["position", "discard", "torch", "preach", "weasel"]
     },
     {
         "name": "Cell Drain 1",
-        "theme": "Wildcard 7",
+        "theme": "Wildcard 3",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
-        "triggers": ["static"]
+        "triggers": ["static", "death"]
     },
     {
         "name": "Cell Drain 2",
-        "theme": "Wildcard 8",
-        "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
-        "triggers": ["handle"]
-    },
-    {
-        "name": "Cell Drain 3",
         "theme": "McDonald's Menu Items",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_drain})))",
         "triggers": ["whopper"]
