@@ -13,7 +13,7 @@
     },
     {
         "name": "Cell Decrease",
-        "theme": "TODO Landmine Words",
+        "theme": "Landmine Words",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_inc})))",
         "triggers": [
             "paradise",

@@ -1,7 +1,7 @@
 import os
 import subprocess
-import pyautogui
-import time
+# import pyautogui
+# import time
 import socket
 import struct
 import atexit
@@ -466,6 +466,6 @@ class TwitchBot(commands.Bot):
         self.clientSocket.sendall(header + form.encode())
         print("Sent: " + form)
 
-# Initialize and run the bot
-bot = TwitchBot()
-bot.run()
+if __name__ == "__main__":
+    bot = TwitchBot()
+    bot.run()
