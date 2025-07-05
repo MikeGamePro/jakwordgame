@@ -1,9 +1,0 @@
-("D3B.DGO"
- ("jak-pole+0-ag.go"
-  "tpage-2406.go"
-  "tpage-2407.go"
-  "tpage-3548.go"
-  "daxter-highres-ag.go"
-  "jak-highres-ag.go"
-  "dig3b-vis.go"
- ))

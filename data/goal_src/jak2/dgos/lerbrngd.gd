@@ -1,9 +1,0 @@
-("LERBRNGD.DGO"
- ("tpage-2703.go"
-  "tpage-3268.go"
-  "samos-highres-ag.go"
-  "baron-highres-ag.go"
-  "crimson-guard-highres-ag.go"
-  "crimson-guard-lowres-ag.go"
-  "lerbrngd.go"
- ))

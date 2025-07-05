@@ -1,9 +1,0 @@
-("LPRSNCST.DGO"
- ("tpage-2658.go"
-  "tpage-3246.go"
-  "youngsamos-highres-ag.go"
-  "jak-highres-ag.go"
-  "samos-highres-ag.go"
-  "tess-highres-ag.go"
-  "lprsncst.go"
- ))
