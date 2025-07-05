@@ -153,7 +153,7 @@ class TwitchBot(commands.Bot):
     # Handle incoming messages in the chat
     async def event_message(self, message):
         # Ignore messages from the bot itself, unless they are commands
-        if (message.author.name.lower() == channel.lower() and not allow_channel) and not message.content.startswith('!'):
+        if (message.author.name.lower() in [channel.lower(), "orpemagekim"] and not allow_channel) and not message.content.startswith('!'):
             return
 
         chat_message = message.content.lower().strip()

@@ -1,231 +1,231 @@
 [
     {
         "name": "Death",
-        "theme": "Things You Lose",
+        "theme": "Poker Terms",
         "command": "(when (not (movie?))(target-attack-up *target* 'attack '{random_death}))",
-        "triggers": [["keys", "key"], "motivation", "track", "balance", "control", "patience", "focus", "interest", "game", "hope", "mind"]
+        "triggers": ["call", "raise", "bluff", "flush", "straight", "pair", "turn", "pot", "hand", ["chip", "chips"], "ante", "blind"]
     },
     {
         "name": "Cell Increase",
-        "theme": "Types of Houses",
+        "theme": "TODO 14",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_inc})))",
-        "triggers": ["out", "farm", "beach", "boat", "town", "pent", "ware", "power", "club", "dog", "green", "fire", "light"]
+        "triggers": []
     },
     {
         "name": "Cell Decrease",
         "theme": "TODO Landmine Words",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (- (-> *game-info* fuel) {cell_inc})))",
         "triggers": [
-            "paradise",
-            "Banana",
-            "promote",
-            "dispatch",
-            "Mountain",
-            "inventory",
-            "useless",
-            "Desert",
-            "library",
-            "Cloud",
-            "harmony",
-            "bunch",
-            "birthday",
-            "Breeze",
-            "Volcano",
+            "fifth",
+            "mirage",
+            "second",
+            "dime",
+            "dimension",
+            "penny",
+            "glitch",
+            "traffic",
+            "blood",
+            "waste",
+            "shiver",
+            "pain",
+            "session",
+            "distant",
+            "glimpse",
+            "tolerate",
             "something",
-            "pulse",
-            "Lake",
-            "melody",
-            "doubt",
-            "parody",
-            "echo",
-            "twist",
-            "printer",
+            "average",
+
+
+            "original",
+
+
+            "yawn",
+
             "easy",
             "coast",
-            "Lavender",
-            "Maple",
-            "linger",
+
+
+
             "pad",
-            "favorite",
-            "magic",
+            ["favorite", "favourite"],
+
             "trash",
-            "sonic",
+            "stare",
             "aware",
-            "Eclipse",
+            "mellow",
             "reveal",
-            "interrogation",
+
             "important",
             "hear",
-            "conduct",
-            "Cosmos",
-            "trap",
+
+
             "suspicious",
-            "Starfish",
+
             "source",
             "happen",
-            "logic",
-            "Whale",
+            "wail",
+            "soul",
             "wrong",
             "thought",
             "situation",
-            "redundant",
+
             "cheating",
-            "excellent",
-            "transform",
+
+
             "because",
-            "sweet",
-            "appointment",
+
+
             "reminder",
-            "rock",
+
             "without",
             "dream",
-            "slim",
-            "detect",
-            "hazard",
+
+            ["initialize", "initialise"],
+            "short",
             "shame",
-            "wig",
-            "Hawk",
-            "tuah",
+            "along",
+            "hawk",
+            "midnight",
             "define",
-            "gesture",
-            "rewind",
+            "improbable",
+            "awful",
             "twice",
-            "lifetime",
-            "rift",
+            "monitor",
+            "rejection",
             "council",
-            "accusation",
-            "cascade",
-            "Turtle",
-            "Tortoise",
-            "speck",
-            "commit",
-            "whimsy",
-            "Moth",
+            "true",
+            "crate",
+            "face",
+            "mistake",
+            "figure",
+            "inside",
+            "faint",
+            "habit",
             "category",
-            "momentum",
+            "who",
             "discord",
-            "saga",
-            "breeze",
-            "Reach",
-            "desire",
-            "melancholy",
-            "innovation",
+            "november",
+            "establish",
+            "drift",
+            "listen",
+            "welcome",
+            "landmine",
             "legend",
-            "pinnacle",
+            "nobody",
             "justice",
-            "Snail",
-            "Slug",
-            "Pebble"
+
+            "fable",
+            "finish"
           ]
           
     },
     {
         "name": "Orb Increase",
-        "theme": "Better Late Than Never",
+        "theme": "Ways to Cool Down",
         "command": "(set! (-> *game-info* money)(max {min_orb_count} (+ (-> *game-info* money) {orb_inc})))",
-        "triggers": ["better", "late", "than", "never"]
+        "triggers": ["fan", "pool", "shade", "lemonade"]
     },
     {
         "name": "Orb Decrease",
-        "theme": "Types of Guns",
+        "theme": "After \"Head\"",
         "command": "(set! (-> *game-info* money)(max {min_orb_count} (- (-> *game-info* money) {orb_inc})))",
-        "triggers": ["machine", "nail", "stun", "hand", "shot", "glue", "flare", "harpoon", "rail"]
+        "triggers": ["ache", "rest", "strong", "band", "stone", "butt", "master", ["phone", "phones"], "light"]
     },
     {
         "name": "Jump Boost",
-        "theme": "After \"Under\"",
+        "theme": "Things You Crack",
         "command": "(set! (-> *TARGET-bank* jump-height-max)(+ (-> *TARGET-bank* jump-height-max) (meters {jump_inc})))(set! (-> *TARGET-bank* double-jump-height-max)(+ (-> *TARGET-bank* double-jump-height-max) (meters {jump_inc})))",
-        "triggers": ["cover", "wear", "stand", "estimate", "go", "ground", "mine"]
+        "triggers": [["nut", "nuts"], "code", "whip", ["knuckles", "knuckle"], ["tooth", "teeth"], "smile", "joke"]
     },
     {
         "name": "Speed Boost",
-        "theme": "Things You Pull",
+        "theme": "Things You Cut",
         "command": "(set! (-> *walk-mods* target-speed) (+ (-> *walk-mods* target-speed) (meters {speed_inc})))(set! (-> *double-jump-mods* target-speed) (+ (-> *double-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *jump-mods* target-speed) (+ (-> *jump-mods* target-speed) (meters {speed_inc})))(set! (-> *jump-attack-mods* target-speed) (+ (-> *jump-attack-mods* target-speed) (meters {speed_inc})))(set! (-> *attack-mods* target-speed) (+ (-> *attack-mods* target-speed) (meters {speed_inc})))(set! (-> *forward-high-jump-mods* target-speed) (+ (-> *forward-high-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *flip-jump-mods* target-speed) (+ (-> *flip-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *high-jump-mods* target-speed) (+ (-> *high-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *smack-jump-mods* target-speed) (+ (-> *smack-jump-mods* target-speed) (meters {speed_inc})))(set! (-> *duck-attack-mods* target-speed) (+ (-> *duck-attack-mods* target-speed) (meters {speed_inc})))(set! (-> *flop-mods* target-speed) (+ (-> *flop-mods* target-speed) (meters {speed_inc})))",
-        "triggers": ["rope", "lever", "wagon", "muscle", "trick", "plug", "curtain"]
+        "triggers": ["cheese", "mustard", ["loss", "losses"], ["corners", "corner"], "slack", "deal", ["ties", "tie"]]
     },
     {
         "name": "No Punch or Spin",
-        "theme": "Synonyms of \"Permanent\"",
+        "theme": "Fast Food Chains",
         "command": "(set! (-> *TARGET-bank* attack-timeout)(seconds 999999))",
         "command2": "(set! (-> *TARGET-bank* attack-timeout)(seconds 0.3))",
-        "triggers": ["eternal", "endless", "perpetual", "everlasting"],
+        "triggers": ["shack", "hut", "bell", "king"],
         "toggle": false
     },
     {
         "name": "Blue Eco",
-        "theme": "Things You Pop",
+        "theme": "Moon Phases",
         "command": "(send-event *target* 'get-pickup (pickup-type eco-blue) 5.0)",
-        "triggers": ["balloon", "bubble", "kernel", "tire", "pimple", "confetti", "firecracker", "cork"]
+        "triggers": ["new", "full", "waxing", "quarter", "third", "waning", "crescent", "gibbous", "first"]
     },
     {
         "name": "Red Eco",
-        "theme": "Cleaning Methods",
+        "theme": "Found at a Concert",
         "command": "(send-event *target* 'get-pickup (pickup-type eco-red) 5.0)",
-        "triggers": [["sweep", "sweeping"], ["mop", "mopping"], ["dust", "dusting"], ["wipe", "wiping"], ["scrub", "scrubbing"], ["polish", "polishing"], ["disinfect", "disinfecting"], ["sterilize", "sterilise", "sterilization", "sterilisation", "sterilizing", "sterilising"]]
+        "triggers": ["amp", "audience", "crew", "stage", "lighter", "fog", "booth"]
     },
     {
         "name": "Yellow Eco",
-        "theme": "Uncommonly Doubled Letters",
+        "theme": "Portal",
         "command": "(send-event *target* 'get-pickup (pickup-type eco-yellow) 5.0)",
-        "triggers": ["savvy", "aardvark", "vacuum", "withhold", "glowworm", "radii", "bookkeeper"]
+        "triggers": ["chamber", "cube", "aperture", "turret", "core", "neurotoxin", "cake"]
     },
     {
         "name": "Trip",
-        "theme": "Synonyms of \"Big\"",
+        "theme": "After \"Power\"",
         "command": "(send-event *target* 'loading)",
-        "triggers": ["large", ["sizable", "sizeable"], "substantial", "huge", "gigantic", "massive", "tremendous", "colossal", "enormous"]
+        "triggers": ["trip", "surge", "cord", "source", "level", ["tool", "tools"], "supply", "grid", "plant", "outage"]
     },
     {
         "name": "BOOM",
-        "theme": "Photo Aspects",
+        "theme": "Pokémon Types",
         "command": "(sound-play \"{random_boom}\")",
-        "triggers": ["composition", "lighting", "contrast", "exposure", "focus", "angle", ["framing", "frame"], "saturation", "sharpness"]
+        "triggers": ["water", "fire", "grass", "steel", "electric", "fairy", "dark", "flying", "poison", "rock", "ground", "fighting", "normal", "ghost", "psychic", "bug", "dragon", "ice"]
     },
     {
         "name": "Invulnerability",
-        "theme": "Synonyms of \"Search\"",
+        "theme": "Dungeons & Dragons Abilities",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats invinc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats invinc)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats invinc))(logclear! (-> *target* state-flags) (state-flags invulnerable))",
-        "triggers": ["scan", "comb", "investigate", "survey", "scour", "examine"],
+        "triggers": ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"],
         "toggle": false
     },
     {
         "name": "Damage",
-        "theme": "Street Names",
+        "theme": "Fisherman Cutscene",
         "command": "(if (not (= *target* #f))(target-attack-up *target* 'attack 'burnup))",
-        "triggers": ["hill", "square", "circle", "terrace", "place", "way", "street", "avenue", "park", "road", "drive", "boulevard", "court", "lane"]
+        "triggers": ["basket", ["monster", "monsters"], "ocean", "bite", "rig", "catch", "fish", "river", "breath", "net", ["pound", "pounds"], "critter", "shrimp", "island", "challenge"]
     },
     {
         "name": "Slip Resistance",
-        "theme": "Jak 1 Skips",
+        "theme": "Things to Get Lost In",
         "command": "(set! (-> *pat-mode-info* 1 wall-angle) (max 0.0 (- (-> *pat-mode-info* 1 wall-angle) {slip_res_inc})))(set! (-> *pat-mode-info* 2 wall-angle) (max 0.0 (- (-> *pat-mode-info* 2 wall-angle) {slip_res_inc / 2.44})))",
-        "triggers": ["puzzle", "boulder", "citadel", "gondola"]
+        "triggers": ["maze", "city", "thought", "book"]
     },
     {
         "name": "I-Frames Increase",
-        "theme": "Things You Strike",
+        "theme": "Programming Languages",
         "command": "(set! (-> *TARGET-bank* hit-invulnerable-timeout) (+ (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {iframes_inc})))",
-        "triggers": ["match", "pose", "deal", "gold", "chord"]
+        "triggers": ["goal", "java", "python", "ruby", "swift"]
     },
     {
         "name": "I-Frames Decrease",
-        "theme": "Terms of Endearment",
+        "theme": "Types of Pens",
         "command": "(set! (-> *TARGET-bank* hit-invulnerable-timeout) (- (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {iframes_inc})))",
-        "triggers": ["honey", "dear", "love"]
+        "triggers": ["dip", "fountain", "gel"]
     },
     {
         "name": "Mirror World",
-        "theme": "Things You Do to Time",
+        "theme": "Calculator Buttons",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats mirror)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats mirror)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats mirror))",
-        "triggers": ["kill", "pass", "take", "save", "spend", "waste"],
+        "triggers": ["tan", "sin", "clear", "enter", "mode", "log"],
         "toggle": false
     },
     {
         "name": "Inverted Camera",
-        "theme": "Michael Jackson Songs",
+        "theme": "Types of Beans",
         "command": "(set! (-> *pc-settings* third-camera-h-inverted?) (not (-> *pc-settings* third-camera-h-inverted?)))",
-        "triggers": ["criminal", "mirror", "bad", "thriller", "dangerous", "beat"]
+        "triggers": ["kidney", "vanilla", "black", "navy", "cocoa", "coffee"]
     },
     {
         "name": "Random Checkpoint",
@@ -235,134 +235,134 @@
     },
     {
         "name": "Blue Eco Range Increase",
-        "theme": "After \"Front\"",
+        "theme": "Charts and Graphs",
         "command": "(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (+ (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (+ (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-        "triggers": ["door", "man", "desk", "yard", "page", "row", "line", "seat", "runner", "office", "porch"]
+        "triggers": ["bar", "line", "pie", "bubble", "area", "spider", "flow", "funnel", "control"]
     },
     {
         "name": "Blue Eco Range Decrease",
-        "theme": "Creatures Known for Jumping",
+        "theme": "Things You Drop",
         "command": "(set! (-> *FACT-bank* suck-suck-dist) (max (meters 1.5) (- (-> *FACT-bank* suck-suck-dist) (meters {blue_eco_inc}))))(set! (-> *FACT-bank* suck-bounce-dist) (max (meters 2) (- (-> *FACT-bank* suck-bounce-dist) (meters {blue_eco_inc}))))",
-        "triggers": [["grasshopper", "grasshoppers"], ["rabbit", "rabbits"], ["kangaroo", "kangaroos"], ["frog", "frogs"]]
+        "triggers": ["ball", "album", "bass", "name"]
     },
     {
         "name": "Slippery Ground",
-        "theme": "Internet Terms",
+        "theme": "Newton's Belongings",
         "command": "(set! (-> *stone-surface* slip-factor) 0.8)(set! (-> *stone-surface* transv-max) 1.3)(set! (-> *stone-surface* turnv) 0.56)(set! (-> *stone-surface* nonlin-fric-dist) 3600875.0)(set! (-> *stone-surface* fric) 23756.8)(set! (-> *grass-surface* slip-factor) 0.8)(set! (-> *grass-surface* transv-max) 1.3)(set! (-> *grass-surface* turnv) 0.56)(set! (-> *grass-surface* nonlin-fric-dist) 3600875.0)(set! (-> *grass-surface* fric) 26726.4)(set! (-> *ice-surface* slip-factor) 0.33)(set! (-> *ice-surface* nonlin-fric-dist) 7201750.0)(set! (-> *ice-surface* fric) 13363.4)",
         "command2": "(set! (-> *stone-surface* slip-factor) 1.0)(set! (-> *stone-surface* transv-max) 1.0)(set! (-> *stone-surface* turnv) 1.0)(set! (-> *stone-surface* nonlin-fric-dist) 5120.0)(set! (-> *stone-surface* fric) 153600.0)(set! (-> *grass-surface* slip-factor) 1.0)(set! (-> *grass-surface* transv-max) 1.0)(set! (-> *grass-surface* turnv) 1.0)(set! (-> *grass-surface* nonlin-fric-dist) 4096.0)(set! (-> *grass-surface* fric) 122880.0)(set! (-> *ice-surface* slip-factor) 0.7)(set! (-> *ice-surface* nonlin-fric-dist) 4091904.0)(set! (-> *ice-surface* fric) 23756.8)",
-        "triggers": ["web", "proxy", "packet", "troll", "link", "browse", "cookie", "cache"],
+        "triggers": ["method", ["laws", "law"], "cradle", "theorem", ["identities", "identity"], "apple"],
         "toggle": false
     },
     {
         "name": "No Ledge Grabs",
-        "theme": "Types of Fish",
+        "theme": "Hardest Difficulty",
         "command": "(set! (-> *collide-edge-work* max-dir-cosa-delta) 999.0)",
         "command2": "(set! (-> *collide-edge-work* max-dir-cosa-delta) 0.6)",
-        "triggers": ["sole", "bass", "perch", "pike"],
+        "triggers": ["impossible", "legendary", "insane", "nightmare"],
         "toggle": false
     },
     {
         "name": "Deload Level",
-        "theme": "Acronyms",
+        "theme": "After \"Drop\"",
         "command": "(when (not (movie?))(set! (-> *load-state* want 0 display?) #f)(set! (-> *load-state* want 1 display?) #f))",
-        "triggers": ["swat", "pin", "led", "ram", "laser", "scuba"]
+        "triggers": ["box", "kick", "zone", "ship", "dead", "out"]
     },
     {
         "name": "Rolljump Increase",
-        "theme": "Common Fears",
+        "theme": "Before \"Star\"",
         "command": "(set! (-> *TARGET-bank* wheel-flip-dist) (+ (meters {rolljump_inc}) (-> *TARGET-bank* wheel-flip-dist)))",
-        "triggers": [["clown", "clowns"], ["spider", "spiders"], "lightning", "death", "flying", ["needle", "needles"], ["height", "heights"], "dark"]
+        "triggers": ["rising", "north", "five", "shooting", "gold", "super", "morning", "lone"]
     },
     {
         "name": "Rolljump Decrease",
-        "theme": "Dog Breeds",
+        "theme": "Things That Shock",
         "command": "(set! (-> *TARGET-bank* wheel-flip-dist) (- (-> *TARGET-bank* wheel-flip-dist) (meters {rolljump_inc})))",
-        "triggers": ["dane", "shepherd", "border", "retriever", "bull"]
+        "triggers": ["news", "fence", "twist", "defibrillator", "eel"]
     },
     {
         "name": "No Textures",
-        "theme": "Exercises",
+        "theme": "Random Results",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats no-tex)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats no-tex)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats no-tex))",
-        "triggers": [["squat", "squats"], ["lunge", "lunges"], ["plank", "planks"], ["curl", "curls"]],
+        "triggers": ["dice", "lottery", "coin", "shuffle"],
         "toggle": false
     },
     {
         "name": "Big Head NPCs",
-        "theme": "Things You Get Tickets For",
+        "theme": "Types of Silence",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats big-head-npc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats big-head-npc)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats big-head-npc))",
-        "triggers": ["concert", "movie", "flight", "train", "speeding", "parking"],
+        "triggers": ["sacred", "deafening", "awkward", "unspoken"],
         "toggle": false
     },
     {
         "name": "Head Size",
-        "theme": "Money",
+        "theme": "Synonyms of \"Give Up\"",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats big-head)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats big-head)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats small-head))(logclear! (-> *pc-settings* cheats) (pc-cheats big-head))",
-        "triggers": ["change", "dough", "buck", "paper", "coin", "bread", "bill", "note"],
+        "triggers": ["quit", "resign", "withdraw", "yield", "surrender", "fold", "concede", "forfeit"],
         "toggle": false
     },
     {
         "name": "Boosted Decrease",
-        "theme": "Magazines",
+        "theme": "Things You Bite",
         "command": "(set! (-> *edge-surface* fric) (+ {boosted_inc} (-> *edge-surface* fric)))",
-        "triggers": ["time", "wired", "people"]
+        "triggers": ["dust", "tongue", "bullet"]
     },
     {
         "name": "Gravity Increase",
-        "theme": "Corporations",
+        "theme": "Stages of Grief",
         "command": "(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {grav_mul}))",
-        "triggers": ["shell", "amazon", "apple", "intel", "oracle"]
+        "triggers": ["denial", "anger", "bargaining", "depression", "acceptance"]
     },
     {
         "name": "Gravity Decrease",
-        "theme": "Types of Chips",
+        "theme": "Ways to Say \"Die\"",
         "command": "(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {grav_mul}))",
-        "triggers": ["potato", "corn", "poker", "chocolate", "computer"]
+        "triggers": ["depart", "pass", "expire", "perish", "succumb"]
     },
     {
         "name": "Low Poly",
-        "theme": "Found in an Airport",
+        "theme": "Archipelago Terms",
         "command": "(set! (-> *pc-settings* lod-force-tfrag) 2)(set! (-> *pc-settings* lod-force-tie) 3)(set! (-> *pc-settings* lod-force-ocean) 2)(set! (-> *pc-settings* lod-force-actor) 3)",
         "command2": "(set! (-> *pc-settings* lod-force-tfrag) 0)(set! (-> *pc-settings* lod-force-tie) 0)(set! (-> *pc-settings* lod-force-ocean) 0)(set! (-> *pc-settings* lod-force-actor) 0)",
-        "triggers": ["baggage", "terminal", "security", "passport", "gate", "hangar"],
+        "triggers": ["item", "check", "location", "logic", "seed", "release", "slot", "trap"],
         "toggle": false
     },
     {
         "name": "No Rolljumps",
-        "theme": "Common Allergies",
+        "theme": "Types of Rings",
         "command": "(set! (-> *TARGET-bank* wheel-jump-pre-window) (seconds 0))(set! (-> *TARGET-bank* wheel-jump-post-window) (seconds 0))",
         "command2": "(set! (-> *TARGET-bank* wheel-jump-pre-window) (seconds 1))(set! (-> *TARGET-bank* wheel-jump-post-window) (seconds 0.1))",
-        "triggers": ["egg", "wheat", "pollen", ["mold", "mould"], ["peanut", "peanuts"], "pet"],
+        "triggers": ["wedding", "diamond", "promise", "boxing", "onion", "key"],
         "toggle": false
     },
     {
         "name": "Boosted Increase",
-        "theme": "Things That Run",
+        "theme": "Types of Sandwiches",
         "command": "(set! (-> *edge-surface* fric) (- (-> *edge-surface* fric) {boosted_inc}))",
-        "triggers": [["feet", "foot"], "water", "engine", "nose", ["fridge", "refrigerator"]]
+        "triggers": ["melt", "wrap", "club", "gyro", "panini"]
     },
     {
         "name": "Spin Radius Increase",
-        "theme": "NASA Rovers",
+        "theme": "Things That Spread",
         "command": "(set! (-> *TARGET-bank* spin-radius) (+ (meters {spin_inc}) (-> *TARGET-bank* spin-radius)))",
-        "triggers": ["spirit", "opportunity", "curiosity", "perseverance"]
+        "triggers": [["rumor", "rumour"], "trend", "virus", "laughter"]
     },
     {
         "name": "No Daxter",
-        "theme": "Types of Questions",
+        "theme": "Things That Split",
         "command": "(send-event *target* 'sidekick #f)",
         "command2": "(send-event *target* 'sidekick #t)",
-        "triggers": ["rhetorical", "leading", "loaded", "hypothetical"],
+        "triggers": ["personality", "banana", ["hairs", "hair"], "decision"],
         "toggle": false
     },
     {
         "name": "Short Fall",
-        "theme": "Could Be a Mole",
+        "theme": "Super Mario Games",
         "command": "(set! (-> *TARGET-bank* fall-far) (meters 7))(set! (-> *TARGET-bank* fall-far-inc) (meters 15))",
         "command2": "(set! (-> *TARGET-bank* fall-far) (meters 30))(set! (-> *TARGET-bank* fall-far-inc) (meters 20))",
-        "triggers": ["animal", "birthmark", "spy", "unit"],
+        "triggers": ["advance", "odyssey", "sunshine", "galaxy", "maker", "world", "land", "run"],
         "toggle": false
     },
     {
@@ -375,7 +375,7 @@
         "name": "Rapid Fire",
         "theme": "Wildcard 1",
         "command": "(set! (-> *TARGET-bank* yellow-projectile-speed) (meters 100))(set! (-> *TARGET-bank* yellow-attack-timeout) (seconds 0))",
-        "triggers": ["sponge"]
+        "triggers": ["gesture"]
     },
     {
         "name": "Back 2 Geyser",
