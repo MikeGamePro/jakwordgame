@@ -7,9 +7,9 @@
     },
     {
         "name": "Cell Increase",
-        "theme": "TODO 14",
+        "theme": "Found in a Bank",
         "command": "(set! (-> *game-info* fuel)(max {min_cell_count} (+ (-> *game-info* fuel) {cell_inc})))",
-        "triggers": []
+        "triggers": ["vault", "teller", "deposit", "loan", "receipt", "interest", "account", "queue", "card", "statement", "signature", "envelope"]
     },
     {
         "name": "Cell Decrease",
@@ -34,59 +34,59 @@
             "tolerate",
             "something",
             "average",
-
-
+            "brain",
+            "liver",
             "original",
-
-
+            "firm",
+            "exposure",
             "yawn",
-
+            "ideal",
             "easy",
             "coast",
-
-
-
+            "bang",
+            "collapse",
+            "amber",
             "pad",
             ["favorite", "favourite"],
-
+            "still",
             "trash",
             "stare",
             "aware",
             "mellow",
             "reveal",
-
+            "sequence",
             "important",
             "hear",
-
-
+            "whole",
+            "civilian",
             "suspicious",
-
-            "source",
+            "drowsy",
+            "hollow",
             "happen",
             "wail",
             "soul",
             "wrong",
-            "thought",
+            "squeak",
             "situation",
-
+            "itch",
             "cheating",
-
-
+            "nudge",
+            "blanket",
             "because",
-
-
+            "loop",
+            "squint",
             "reminder",
-
+            "stellar",
             "without",
             "dream",
-
+            "goofy",
             ["initialize", "initialise"],
             "short",
             "shame",
             "along",
             "hawk",
             "midnight",
-            "define",
+            "moss",
             "improbable",
             "awful",
             "twice",
@@ -113,7 +113,7 @@
             "legend",
             "nobody",
             "justice",
-
+            "maybe",
             "fable",
             "finish"
           ]
@@ -193,7 +193,7 @@
         "name": "Damage",
         "theme": "Fisherman Cutscene",
         "command": "(if (not (= *target* #f))(target-attack-up *target* 'attack 'burnup))",
-        "triggers": ["basket", ["monster", "monsters"], "ocean", "bite", "rig", "catch", "fish", "river", "breath", "net", ["pound", "pounds"], "critter", "shrimp", "island", "challenge"]
+        "triggers": ["basket", ["monster", "monsters"], "ocean", "bite", "rig", "catch", "fish", "river", "breath", "net", ["pound", "pounds"], ["critters", "critter"], "shrimp", "island", "challenge"]
     },
     {
         "name": "Slip Resistance",
@@ -208,7 +208,7 @@
         "triggers": ["goal", "java", "python", "ruby", "swift"]
     },
     {
-        "name": "I-Frames Decrease",
+        "name": "**I-Frames Decrease",
         "theme": "Types of Pens",
         "command": "(set! (-> *TARGET-bank* hit-invulnerable-timeout) (- (-> *TARGET-bank* hit-invulnerable-timeout) (seconds {iframes_inc})))",
         "triggers": ["dip", "fountain", "gel"]
@@ -222,7 +222,7 @@
         "toggle": false
     },
     {
-        "name": "Inverted Camera",
+        "name": "**Inverted Camera",
         "theme": "Types of Beans",
         "command": "(set! (-> *pc-settings* third-camera-h-inverted?) (not (-> *pc-settings* third-camera-h-inverted?)))",
         "triggers": ["kidney", "vanilla", "black", "navy", "cocoa", "coffee"]
@@ -274,7 +274,7 @@
         "triggers": ["rising", "north", "five", "shooting", "gold", "super", "morning", "lone"]
     },
     {
-        "name": "Rolljump Decrease",
+        "name": "**Rolljump Decrease",
         "theme": "Things That Shock",
         "command": "(set! (-> *TARGET-bank* wheel-flip-dist) (- (-> *TARGET-bank* wheel-flip-dist) (meters {rolljump_inc})))",
         "triggers": ["news", "fence", "twist", "defibrillator", "eel"]
@@ -288,7 +288,7 @@
         "toggle": false
     },
     {
-        "name": "Big Head NPCs",
+        "name": "**Big Head NPCs",
         "theme": "Types of Silence",
         "command": "(begin (logior! (-> *pc-settings* cheats) (pc-cheats big-head-npc)) (logclear! (-> *pc-settings* cheats-known) (pc-cheats big-head-npc)))",
         "command2": "(logclear! (-> *pc-settings* cheats) (pc-cheats big-head-npc))",
@@ -310,13 +310,13 @@
         "triggers": ["dust", "tongue", "bullet"]
     },
     {
-        "name": "Gravity Increase",
+        "name": "**Gravity Increase",
         "theme": "Stages of Grief",
         "command": "(set! (-> *standard-dynamics* gravity-length) (* (-> *standard-dynamics* gravity-length) {grav_mul}))",
         "triggers": ["denial", "anger", "bargaining", "depression", "acceptance"]
     },
     {
-        "name": "Gravity Decrease",
+        "name": "**Gravity Decrease",
         "theme": "Ways to Say \"Die\"",
         "command": "(set! (-> *standard-dynamics* gravity-length) (/ (-> *standard-dynamics* gravity-length) {grav_mul}))",
         "triggers": ["depart", "pass", "expire", "perish", "succumb"]
@@ -338,13 +338,13 @@
         "toggle": false
     },
     {
-        "name": "Boosted Increase",
+        "name": "**Boosted Increase",
         "theme": "Types of Sandwiches",
         "command": "(set! (-> *edge-surface* fric) (- (-> *edge-surface* fric) {boosted_inc}))",
         "triggers": ["melt", "wrap", "club", "gyro", "panini"]
     },
     {
-        "name": "Spin Radius Increase",
+        "name": "**Spin Radius Increase",
         "theme": "Things That Spread",
         "command": "(set! (-> *TARGET-bank* spin-radius) (+ (meters {spin_inc}) (-> *TARGET-bank* spin-radius)))",
         "triggers": [["rumor", "rumour"], "trend", "virus", "laughter"]
